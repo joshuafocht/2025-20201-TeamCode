@@ -7,20 +7,18 @@ import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
+import org.firstinspires.ftc.teamcode.subsystems.ArtifactCycle
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 
 
 @Autonomous
 class BlueGoalAuto : LinearOpMode() {
-    var autoState = 0
-    var autoTimer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
-
     override fun runOpMode() {
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
+        var opModeState = 0
 
         val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
         val transferMotor = MotorEx(hardwareMap, "transferMotor")
@@ -72,6 +70,17 @@ class BlueGoalAuto : LinearOpMode() {
             .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(144.0))
             .build();
 
+        val cycle1 = ArtifactCycle(
+            follower,
+            driveToArtifact1Path,
+            pickupArtifact1Path,
+            driveToGoal1Path,
+            shooter,
+            intakeMotor,
+            transferMotor,
+            telemetryJ
+        )
+
         ///////////////////////////////////////////////////////////////////////////////////////////
         //
         // Second 3 Artifacts Pickup Paths
@@ -112,6 +121,17 @@ class BlueGoalAuto : LinearOpMode() {
             )
             .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(144.0))
             .build();
+
+        val cycle2 = ArtifactCycle(
+            follower,
+            driveToArtifact2Path,
+            pickupArtifact2Path,
+            driveToGoal2Path,
+            shooter,
+            intakeMotor,
+            transferMotor,
+            telemetryJ
+        )
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -154,82 +174,50 @@ class BlueGoalAuto : LinearOpMode() {
             .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(144.0))
             .build();
 
+        val cycle3 = ArtifactCycle(
+            follower,
+            driveToArtifact3Path,
+            pickupArtifact3Path,
+            driveToGoal3Path,
+            shooter,
+            intakeMotor,
+            transferMotor,
+            telemetryJ
+        )
+
         waitForStart()
         while (opModeIsActive()) {
             telemetryJ.update()
             follower.update()
             shooter.update()
+            cycle1.update()
+            cycle2.update()
+            cycle3.update()
 
-            when (autoState) {
-                0 -> { // Start driveToArtifactPath
-                    follower.followPath(driveToArtifact1Path)
-                    incState()
+            when (opModeState) {
+                0 -> {
+                    cycle1.state = 0
+                    opModeState++
                 }
-                1 -> { // Wait for path to finish
-                    if (!follower.followingPathChain) incState()
-                }
-                2 -> { // Start intakeMotor
-                    intakeMotor.set(1.0)
-                    incState()
-                }
-                3 -> { // Start pickupArtifactPath
-                    follower.followPath(pickupArtifact1Path)
-                    incState()
-                }
-                4 -> { // Wait for path to finish
-                    if (!follower.followingPathChain) incState()
-                }
-                5 -> { // Run transfer for 1 second to bring last ball in
-                    if (autoTimer.time() < 500) {
-                        transferMotor.set(0.6)
-                    } else {
-                        transferMotor.set(0.0)
-                        incState()
+                1 -> {
+                    if (cycle1.finished) {
+                        cycle2.state = 0
+                        opModeState++
                     }
                 }
-                6 -> { // Drive to "goal"
-                    follower.followPath(driveToGoal1Path)
-                    incState()
-                }
-                7 -> { // Wait for path to finish
-                    if (!follower.followingPathChain) incState()
-                }
-                8 -> { // Run transfer backwards to get ball out of shooter
-                    if (autoTimer.time() < 750) {
-                        intakeMotor.set(0.0)
-                        transferMotor.set(-0.6)
-                    } else {
-                        incState()
+                2 -> {
+                    if (cycle2.finished) {
+                        cycle3.state = 0
+                        opModeState++
                     }
                 }
-                9 -> { // Spin up shooter
-                    shooter.armed = true
-                    telemetryJ.addData("shooter.tps", shooter.tps)
-                    telemetryJ.addData("shooter.realTPS", shooter.realTPS)
-                    if (shooter.spunUp) incState()
-                }
-                10 -> {
-                    if (autoTimer.time() < 3000) {
-                        intakeMotor.set(1.0)
-                        transferMotor.set(1.0)
-                    } else {
-                        intakeMotor.set(0.0)
-                        transferMotor.set(0.0)
-                        shooter.armed = false
-                        incState()
+                3 -> {
+                    if (cycle3.finished) {
+                        opModeState++
                     }
                 }
-                11 -> {
-                    telemetryJ.clearAll()
-                    telemetryJ.addLine("Done!")
-                }
-                else -> {idle()}
+                else -> { idle() }
             }
         }
-    }
-
-    fun incState() {
-        autoState++
-        autoTimer.reset()
     }
 }

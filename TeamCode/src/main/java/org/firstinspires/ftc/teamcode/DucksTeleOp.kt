@@ -87,6 +87,19 @@ class DucksTeleOp : LinearOpMode() {
             else
                 transferMotor.set(0.0)
 
+            if (shooterOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+                shooter.armed = true
+            } else if (shooterOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+                if (shooter.spunUp) {
+                    intakeMotor.set(1.0)
+                    transferMotor.set(1.0)
+                }
+            } else if (shooterOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
+                shooter.armed = false
+                intakeMotor.set(0.0)
+                transferMotor.set(0.0)
+            }
+
             telemetryJ.addData("position.x", follower.pose.x)
             telemetryJ.addData("position.y", follower.pose.y)
             telemetryJ.addData("position.heading", follower.pose.heading)

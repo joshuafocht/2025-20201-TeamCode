@@ -15,8 +15,12 @@ import org.firstinspires.ftc.teamcode.tuning.Subsystems
 
 @Autonomous
 class TestAuto : LinearOpMode() {
-    var autoState = 0
     var autoTimer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
+    var autoState = 0
+        set(value) {
+            field = value
+            autoTimer.reset()
+        }
 
     override fun runOpMode() {
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
@@ -73,50 +77,50 @@ class TestAuto : LinearOpMode() {
             when (autoState) {
                 0 -> { // Start driveToArtifactPath
                     follower.followPath(driveToArtifactPath)
-                    incState()
+                    autoState++
                 }
                 1 -> { // Wait for path to finish
-                    if (!follower.followingPathChain) incState()
+                    if (!follower.followingPathChain) autoState++
                 }
-                2 -> { // Start intakeMotor
+                2 -> { // Start intakeMotor and transferMotor
                     intakeMotor.set(1.0)
-                    incState()
+                    transferMotor.set(1.0)
+                    autoState++
                 }
                 3 -> { // Start pickupArtifactPath
                     follower.followPath(pickupArtifactPath)
-                    incState()
+                    autoState++
                 }
-                4 -> { // Wait for path to finish
-                    if (!follower.followingPathChain) incState()
+                4 -> { // Wait for path to finish and stop transfer halfway through
+                    if (!follower.followingPathChain) autoState++
+                    if (autoTimer.time() < 750) transferMotor.set(0.0)
                 }
-                5 -> { // Run transfer for 1 second to bring last ball in
-                    if (autoTimer.time() < 500) {
-                        transferMotor.set(0.6)
-                    } else {
-                        transferMotor.set(0.0)
-                        incState()
+                5 -> { // Let intake run for some extra time at the end to bring the last ball in
+                    if (autoTimer.time() < 750) {
+                        intakeMotor.set(0.0)
+                        autoState++
                     }
                 }
-                6 -> { // Drive to "goal"
+                6 -> { // Drive to goal
                     follower.followPath(driveToGoalPath)
-                    incState()
+                    autoState++
                 }
                 7 -> { // Wait for path to finish
-                    if (!follower.followingPathChain) incState()
+                    if (!follower.followingPathChain) autoState++
                 }
                 8 -> { // Run transfer backwards to get ball out of shooter
                     if (autoTimer.time() < 750) {
                         intakeMotor.set(0.0)
                         transferMotor.set(-0.6)
                     } else {
-                        incState()
+                        autoState++
                     }
                 }
                 9 -> { // Spin up shooter
                     shooter.armed = true
                     telemetryJ.addData("shooter.tps", shooter.tps)
                     telemetryJ.addData("shooter.realTPS", shooter.realTPS)
-                    if (shooter.spunUp) incState()
+                    if (shooter.spunUp) autoState++
                 }
                 10 -> { // Shoot the balls
                     if (autoTimer.time() < 3000) {
@@ -126,20 +130,16 @@ class TestAuto : LinearOpMode() {
                         intakeMotor.set(0.0)
                         transferMotor.set(0.0)
                         shooter.armed = false
-                        incState()
+                        autoState++
                     }
                 }
                 11 -> { // Show that we are done
                     telemetryJ.clearAll()
                     telemetryJ.addLine("Done!")
+                    autoState++
                 }
-                else -> {idle()}
+                else -> { idle() }
             }
         }
-    }
-
-    fun incState() {
-        autoState++
-        autoTimer.reset()
     }
 }

@@ -22,7 +22,7 @@ public class Constants {
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.0005, 0.6, 0.01))
             .centripetalScaling(0.0005);
 
-    // brakingStart: started out 1.2 (bit late), 1.5 seemed fine (heading would drift over time, might be bad floor), trying 1.3 as a middle ground
+    // brakingStart: started out 1.2 (bit early), 1.5 seemed fine (heading would drift over time, might be bad floor), trying 1.3 as a middle ground
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 0.8, 1.3);
 
     public static MecanumConstants driveConstants = new MecanumConstants()

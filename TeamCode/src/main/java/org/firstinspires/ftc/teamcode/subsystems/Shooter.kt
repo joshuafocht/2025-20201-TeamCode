@@ -4,30 +4,45 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
+import kotlin.math.abs
 
 class Shooter(val shooterMotor: MotorEx) {
     init {
         shooterMotor.setRunMode(Motor.RunMode.VelocityControl)
+        update()
+    }
+
+    fun update() {
         shooterMotor.setVeloCoefficients(
             Subsystems.Shooter.Kp,
             Subsystems.Shooter.Ki,
             Subsystems.Shooter.Kd
         )
+        shooterMotor.setFeedforwardCoefficients(
+            Subsystems.Shooter.Ks,
+            Subsystems.Shooter.Kv,
+            Subsystems.Shooter.Ka
+        )
+        if (armed) shooterMotor.velocity = tps
+        else shooterMotor.velocity = 0.0
     }
 
-    var tps: Double
-        get() = tps
-        set(value) {
-            tps = value
-            shooterMotor.velocity = if (armed) 0.0 else tps
-        }
+    var tps: Double = Subsystems.Shooter.targetTPS
+//        set(value) {
+//            field = value
+//            shooterMotor.velocity = if (armed) tps else 0.0
+//        }
 
-    var armed: Boolean
-        get() = armed
-        set(value) {
-            armed = value
-            shooterMotor.velocity = if (armed) 0.0 else tps
-        }
+    var armed: Boolean = false
+//        set(value) {
+//            field = value
+//            shooterMotor.velocity = if (armed) tps else 0.0
+//        }
+
+    var tolerance: Double = 100.0
+
+    val spunUp: Boolean
+        get() = abs(tps - shooterMotor.velocity) < tolerance
 
     val realTPS: Double
         get() = shooterMotor.velocity

@@ -6,7 +6,7 @@ object Subsystems {
     @Configurable
     object Shooter {
         @JvmField
-        var Kp: Double = 1.0
+        var Kp: Double = 5.0
 
         @JvmField
         var Ki: Double = 0.0
@@ -15,7 +15,19 @@ object Subsystems {
         var Kd: Double = 0.0
 
         @JvmField
+        var Ks: Double = 0.0
+
+        @JvmField
+        var Kv: Double = 1.7
+
+        @JvmField
+        var Ka: Double = 0.0
+
+        @JvmField
         var changeTPS: Double = 50.0
+
+        @JvmField
+        var targetTPS: Double = 1200.0
     }
 
     @Configurable

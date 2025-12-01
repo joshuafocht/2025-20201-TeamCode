@@ -69,7 +69,7 @@ object Subsystems {
         var transferRunInPower: Double = 1.0
 
         @JvmField
-        var intakeRunInTime: Int = 2000
+        var intakeRunInTime: Int = 500
 
         @JvmField
         var intakeRunInPower: Double = 1.0

@@ -5,6 +5,7 @@ import com.pedropathing.follower.Follower
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
+import org.firstinspires.ftc.teamcode.tuning.Subsystems
 
 class ArtifactCycle(
         val follower: Follower,
@@ -25,6 +26,8 @@ class ArtifactCycle(
     var finished = false
 
     fun update() {
+        telemetryJ.addData("state", state)
+        telemetryJ.addData("time", timer.time())
         when (state) {
             0 -> { // Start driveToArtifactPath
                 finished = false
@@ -35,8 +38,8 @@ class ArtifactCycle(
                 if (!follower.followingPathChain) state++
             }
             2 -> { // Start intakeMotor and transferMotor
-                intakeMotor.set(1.0)
-                transferMotor.set(1.0)
+                intakeMotor.set(Subsystems.ArtifactCycle.intakeRunInPower)
+                transferMotor.set(Subsystems.ArtifactCycle.transferRunInPower)
                 state++
             }
             3 -> { // Start pickupArtifactPath
@@ -45,10 +48,10 @@ class ArtifactCycle(
             }
             4 -> { // Wait for path to finish and stop transfer halfway through
                 if (!follower.followingPathChain) state++
-                if (timer.time() < 750) transferMotor.set(0.0)
+                if (timer.time() >= Subsystems.ArtifactCycle.transferRunInTime) transferMotor.set(0.0)
             }
             5 -> { // Let intake run for some extra time at the end to bring the last ball in
-                if (timer.time() < 750) {
+                if (timer.time() < Subsystems.ArtifactCycle.intakeRunInTime) {
                     intakeMotor.set(0.0)
                     state++
                 }
@@ -61,10 +64,11 @@ class ArtifactCycle(
                 if (!follower.followingPathChain) state++
             }
             8 -> { // Run transfer backwards to get ball out of shooter
-                if (timer.time() < 750) {
+                if (timer.time() < Subsystems.ArtifactCycle.transferRunOutTime) {
                     intakeMotor.set(0.0)
-                    transferMotor.set(-0.6)
+                    transferMotor.set(Subsystems.ArtifactCycle.transferRunOutPower)
                 } else {
+                    transferMotor.set(0.0)
                     state++
                 }
             }
@@ -75,7 +79,7 @@ class ArtifactCycle(
                 if (shooter.spunUp) state++
             }
             10 -> { // Shoot the balls
-                if (timer.time() < 3000) {
+                if (timer.time() < Subsystems.ArtifactCycle.shooterTime) {
                     intakeMotor.set(1.0)
                     transferMotor.set(1.0)
                 } else {

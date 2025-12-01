@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.autos
 
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
+import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystems.ArtifactCycle
@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.tuning.Subsystems
 
 
 @Autonomous
-class TestAuto2 : LinearOpMode() {
+class MiniAuto : LinearOpMode() {
     override fun runOpMode() {
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
 
@@ -45,7 +45,7 @@ class TestAuto2 : LinearOpMode() {
             .addPath(
                 BezierLine(
                     Pose(84.000, 56.500),
-                    Pose(84.000, 84.000)
+                    Pose(84.000, 86.000)
                 )
             )
             .setConstantHeadingInterpolation(Math.toRadians(90.0))
@@ -54,8 +54,9 @@ class TestAuto2 : LinearOpMode() {
         val driveToGoalPath = follower
             .pathBuilder()
             .addPath(
-                BezierLine(
-                    Pose(84.000, 84.000),
+                BezierCurve(
+                    Pose(84.000, 86.000),
+                    Pose(72.000, 72.000),
                     Pose(60.000, 84.000)
                 )
             )
@@ -74,6 +75,7 @@ class TestAuto2 : LinearOpMode() {
         )
 
         waitForStart()
+        cycle.state = 0
         while (opModeIsActive()) {
             telemetryJ.update()
             follower.update()

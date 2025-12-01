@@ -59,4 +59,28 @@ object Subsystems {
         @JvmField
         var tps: Double = 50.0
     }
+
+    @Configurable
+    object ArtifactCycle {
+        @JvmField
+        var transferRunInTime: Int = 800
+
+        @JvmField
+        var transferRunInPower: Double = 1.0
+
+        @JvmField
+        var intakeRunInTime: Int = 2000
+
+        @JvmField
+        var intakeRunInPower: Double = 1.0
+
+        @JvmField
+        var transferRunOutTime: Int = 500
+
+        @JvmField
+        var transferRunOutPower: Double = -0.6
+
+        @JvmField
+        var shooterTime: Int = 3000
+    }
 }

@@ -55,8 +55,8 @@ class DucksTeleOp : LinearOpMode() {
 
             follower.setTeleOpDrive(
                 driverOp.leftY,
-                driverOp.leftX,
-                driverOp.rightX,
+                -driverOp.leftX,
+                -driverOp.rightX,
                 true
             )
 

@@ -51,7 +51,7 @@ class TestAuto : LinearOpMode() {
             .addPath(
                 BezierLine(
                     Pose(84.000, 56.500),
-                    Pose(84.000, 84.000)
+                    Pose(84.000, 97.000)
                 )
             )
             .setConstantHeadingInterpolation(Math.toRadians(90.0))
@@ -61,7 +61,7 @@ class TestAuto : LinearOpMode() {
             .pathBuilder()
             .addPath(
                 BezierLine(
-                    Pose(84.000, 84.000),
+                    Pose(84.000, 87.000),
                     Pose(60.000, 84.000)
                 )
             )

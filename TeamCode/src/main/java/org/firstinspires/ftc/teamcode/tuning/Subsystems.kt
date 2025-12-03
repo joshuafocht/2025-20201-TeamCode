@@ -27,7 +27,7 @@ object Subsystems {
         var changeTPS: Double = 50.0
 
         @JvmField
-        var targetTPS: Double = 1200.0
+        var targetTPS: Double = 1000.0
     }
 
     @Configurable

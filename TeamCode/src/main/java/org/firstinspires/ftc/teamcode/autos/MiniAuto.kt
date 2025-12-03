@@ -41,6 +41,7 @@ class MiniAuto : LinearOpMode() {
             .build()
 
         val pickupArtifactPath = follower
+
             .pathBuilder()
             .addPath(
                 BezierLine(

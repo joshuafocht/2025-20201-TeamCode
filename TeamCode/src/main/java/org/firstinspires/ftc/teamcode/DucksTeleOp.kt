@@ -71,7 +71,6 @@ class DucksTeleOp : LinearOpMode() {
                 shooter.tps = -abs(shooter.tps)
             } else {
                 shooter.tps = abs(shooter.tps)
-
             }
 
             if (shooterOp.isDown(GamepadKeys.Button.CROSS))

@@ -22,21 +22,26 @@ class DucksTeleOp : LinearOpMode() {
         val telemetryM = PanelsTelemetry.telemetry
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
 
-        val frontLeftMotor = MotorEx(hardwareMap, "frontLeftMotor")
-        val frontRightMotor = MotorEx(hardwareMap, "frontRightMotor")
-        val backLeftMotor = MotorEx(hardwareMap, "backLeftMotor")
-        val backRightMotor = MotorEx(hardwareMap, "backRightMotor")
+//        val frontLeftMotor = MotorEx(hardwareMap, "frontLeftMotor")
+//        val frontRightMotor = MotorEx(hardwareMap, "frontRightMotor")
+//        val backLeftMotor = MotorEx(hardwareMap, "backLeftMotor")
+//        val backRightMotor = MotorEx(hardwareMap, "backRightMotor")
+//
+//        frontLeftMotor.inverted = true
+//        backLeftMotor.inverted = true
+//
+//        val drive = MecanumDrive(
+//            false,
+//            frontLeftMotor,
+//            frontRightMotor,
+//            backLeftMotor,
+//            backRightMotor
+//        )
 
-        frontLeftMotor.inverted = true
-        backLeftMotor.inverted = true
-
-        val drive = MecanumDrive(
-            false,
-            frontLeftMotor,
-            frontRightMotor,
-            backLeftMotor,
-            backRightMotor
-        )
+        val follower = Constants.createFollower(hardwareMap)
+        follower.activateAllPIDFs()
+        follower.setStartingPose(Pose(72.000, 72.000, 90.000))
+        follower.update()
 
         var moveMult = 1.0
         var turnMult = 1.0
@@ -67,9 +72,9 @@ class DucksTeleOp : LinearOpMode() {
 
             shooter.update()
 
-            drive.driveRobotCentric(
-                -driverOp.leftX * moveMult,
+            follower.setTeleOpDrive(
                 driverOp.leftY * moveMult,
+                -driverOp.leftX * moveMult,
                 -driverOp.rightX * turnMult
             )
 

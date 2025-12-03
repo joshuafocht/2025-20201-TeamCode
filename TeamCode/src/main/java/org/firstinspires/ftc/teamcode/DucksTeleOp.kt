@@ -5,6 +5,7 @@ import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.seattlesolvers.solverslib.drivebase.MecanumDrive
 import com.seattlesolvers.solverslib.gamepad.GamepadEx
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys
 import com.seattlesolvers.solverslib.hardware.motors.Motor
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import kotlin.math.abs
+import kotlin.math.truncate
 
 @TeleOp
 class DucksTeleOp : LinearOpMode() {
@@ -20,9 +22,24 @@ class DucksTeleOp : LinearOpMode() {
         val telemetryM = PanelsTelemetry.telemetry
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
 
-        val follower = Constants.createFollower(hardwareMap)
-        follower.setStartingPose(Pose(72.0, 72.0))
-        follower.update()
+        val frontLeftMotor = MotorEx(hardwareMap, "frontLeftMotor")
+        val frontRightMotor = MotorEx(hardwareMap, "frontRightMotor")
+        val backLeftMotor = MotorEx(hardwareMap, "backLeftMotor")
+        val backRightMotor = MotorEx(hardwareMap, "backRightMotor")
+
+        frontLeftMotor.inverted = true
+        backLeftMotor.inverted = true
+
+        val drive = MecanumDrive(
+            false,
+            frontLeftMotor,
+            frontRightMotor,
+            backLeftMotor,
+            backRightMotor
+        )
+
+        var moveMult = 1.0
+        var turnMult = 1.0
 
         val shooterMotor = MotorEx(hardwareMap, "shooterMotor")
         val transferMotor = MotorEx(hardwareMap, "transferMotor")
@@ -41,10 +58,7 @@ class DucksTeleOp : LinearOpMode() {
 
         waitForStart()
 
-        follower.startTeleOpDrive()
-
         while (!isStopRequested) {
-            follower.update()
             telemetryM.update()
             telemetryJ.update()
 
@@ -53,24 +67,37 @@ class DucksTeleOp : LinearOpMode() {
 
             shooter.update()
 
-            follower.setTeleOpDrive(
-                driverOp.leftY,
-                -driverOp.leftX,
-                -driverOp.rightX,
-                true
+            drive.driveRobotCentric(
+                -driverOp.leftX * moveMult,
+                driverOp.leftY * moveMult,
+                -driverOp.rightX * turnMult
             )
+
+            if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
+                moveMult += 0.05
+            if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
+                moveMult -= 0.05
+            if (driverOp.wasJustPressed(GamepadKeys.Button.TRIANGLE))
+                turnMult += 0.05
+            if (driverOp.wasJustPressed(GamepadKeys.Button.CROSS))
+                turnMult -= 0.05
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
                 shooter.tps += Subsystems.Shooter.changeTPS
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
                 shooter.tps -= Subsystems.Shooter.changeTPS
+
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                shooter.tps = abs(shooter.tps)
                 shooter.armed = !shooter.armed
             }
-            if (shooterOp.isDown(GamepadKeys.Button.DPAD_LEFT)) {
+
+            if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
                 shooter.tps = -abs(shooter.tps)
-            } else {
+                shooter.armed = true
+            } else if (shooterOp.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
                 shooter.tps = abs(shooter.tps)
+                shooter.armed = false
             }
 
             if (shooterOp.isDown(GamepadKeys.Button.CROSS))
@@ -98,10 +125,6 @@ class DucksTeleOp : LinearOpMode() {
                 intakeMotor.set(0.0)
                 transferMotor.set(0.0)
             }
-
-            telemetryJ.addData("position.x", follower.pose.x)
-            telemetryJ.addData("position.y", follower.pose.y)
-            telemetryJ.addData("position.heading", follower.pose.heading)
 
             telemetryJ.addData("shooter.armed", shooter.armed)
             telemetryJ.addData("shooter.spunUp", shooter.spunUp)

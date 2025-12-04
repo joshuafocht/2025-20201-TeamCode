@@ -51,7 +51,7 @@ public class Constants {
             .robotWidth(17.5)
             .forwardTicksToInches(0.006)
             .strafeTicksToInches(0.0055)
-            .turnTicksToInches(0.013);
+            .turnTicksToInches(0.0115);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

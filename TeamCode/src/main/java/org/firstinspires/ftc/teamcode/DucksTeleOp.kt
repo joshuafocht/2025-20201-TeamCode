@@ -62,10 +62,11 @@ class DucksTeleOp : LinearOpMode() {
         val shooterOp = GamepadEx(gamepad2)
 
         waitForStart()
-
+        follower.startTeleOpDrive()
         while (!isStopRequested) {
             telemetryM.update()
             telemetryJ.update()
+            follower.update()
 
             driverOp.readButtons()
             shooterOp.readButtons()

@@ -30,7 +30,7 @@ class RedGoalAuto : LinearOpMode() {
         shooter.tps = Subsystems.Shooter.targetTPS
 
         val follower = Constants.createFollower(hardwareMap)
-        follower.setStartingPose(Pose(119.500, 128.0, Math.toRadians(144.0)))
+        follower.setStartingPose(Pose(119.500, 128.0, Math.toRadians(36.0)))
 
         val driveToArtifactPath = follower
             .pathBuilder()

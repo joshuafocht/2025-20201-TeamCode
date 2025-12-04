@@ -49,7 +49,7 @@ class RedGoalAuto : LinearOpMode() {
             .addPath(
                 BezierLine(
                     Pose(96.000, 84.000),
-                    Pose(129.500, 84.000)
+                    Pose(131.500, 84.000)
                 )
             )
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
@@ -59,9 +59,9 @@ class RedGoalAuto : LinearOpMode() {
             .pathBuilder()
             .addPath(
                 BezierCurve(
-                    Pose(129.500, 84.000),
+                    Pose(131.500, 84.000),
                     Pose(96.000, 108.000),
-                    Pose(119.500, 128.000)
+                    Pose(124.500, 128.000)
                 )
             )
             .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(36.0))

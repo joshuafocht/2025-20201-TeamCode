@@ -49,7 +49,7 @@ class BlueGoalAuto : LinearOpMode() {
             .addPath(
                 BezierLine(
                     Pose(48.000, 84.000),
-                    Pose(16.000, 84.000)
+                    Pose(14.000, 84.000)
                 )
             )
             .setConstantHeadingInterpolation(Math.toRadians(180.0))
@@ -59,13 +59,14 @@ class BlueGoalAuto : LinearOpMode() {
             .pathBuilder()
             .addPath(
                 BezierCurve(
-                    Pose(16.000, 84.000),
+                    Pose(14.000, 84.000),
                     Pose(48.000, 108.000),
-                    Pose(25.000, 128.000)
+                    Pose(20.000, 128.000)
                 )
             )
             .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(144.0))
             .build()
+
         val driveOutPath = follower
             .pathBuilder()
             .addPath(

@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode.autos
 
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.Pose
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 
-
+@Autonomous
 class BlueFarAuto : LinearOpMode() {
     override fun runOpMode() {
         val follower = Constants.createFollower(hardwareMap)

@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 class RedFarAuto : LinearOpMode() {
     override fun runOpMode() {
         val follower = Constants.createFollower(hardwareMap)
-        follower.setStartingPose(Pose(88.000, 8.000, 90.0))
+        follower.setStartingPose(Pose(88.000, 8.000, Math.toRadians(90.0)))
         follower.update()
 
         val path = follower

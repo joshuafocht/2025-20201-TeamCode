@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys
 import com.seattlesolvers.solverslib.hardware.motors.Motor
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
+import org.firstinspires.ftc.teamcode.subsystems.Align
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import kotlin.math.abs
@@ -56,6 +57,8 @@ class DucksTeleOp : LinearOpMode() {
 
         val shooter = Shooter(shooterMotor)
 
+        val align = Align(hardwareMap)
+
         transferMotor.inverted = true
 
         val driverOp = GamepadEx(gamepad1)
@@ -76,7 +79,7 @@ class DucksTeleOp : LinearOpMode() {
             follower.setTeleOpDrive(
                 driverOp.leftY * moveMult,
                 -driverOp.leftX * moveMult,
-                -driverOp.rightX * turnMult
+                (-driverOp.rightX * turnMult) + align.align(20)
             )
 
             if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
@@ -87,6 +90,24 @@ class DucksTeleOp : LinearOpMode() {
                 turnMult += 0.05
             if (driverOp.wasJustPressed(GamepadKeys.Button.CROSS))
                 turnMult -= 0.05
+
+            if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
+                align.enable = 1.0
+            else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+                if (align.aligned) {
+                    shooter.armed = true
+                }
+                if (shooter.spunUp) {
+                    intakeMotor.set(1.0)
+                    transferMotor.set(0.0)
+                }
+            }
+            else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
+                align.enable = 0.0
+                shooter.armed = false
+                intakeMotor.set(0.0)
+                transferMotor.set(0.0)
+            }
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
                 shooter.tps += Subsystems.Shooter.changeTPS

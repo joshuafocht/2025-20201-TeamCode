@@ -83,4 +83,19 @@ object Subsystems {
         @JvmField
         var shooterTime: Int = 3000
     }
+
+    @Configurable
+    object Align {
+        @JvmField
+        var Kp: Double = 0.015
+
+        @JvmField
+        var Ki: Double = 0.0
+
+        @JvmField
+        var Kd: Double = 0.0
+
+        @JvmField
+        var Kf: Double = 0.0
+    }
 }

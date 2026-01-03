@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
+import kotlin.math.abs
 import kotlin.math.round
 
 class Align(val hardwareMap: HardwareMap) {
@@ -22,6 +23,8 @@ class Align(val hardwareMap: HardwareMap) {
     )
     var dist = 0.0
     var targetHeading = 0.0
+    val currentHeading
+        get() = imu.robotYawPitchRollAngles.yaw
     var enable = 0.0
         set(value) {
             field = if (value != 0.0) 1.0 else 0.0
@@ -50,21 +53,21 @@ class Align(val hardwareMap: HardwareMap) {
     }
 
     fun align(id: Int): Double {
-        val orientation = imu.robotYawPitchRollAngles
         for (i in aprilTag?.detections?.indices!!) {
             val tag = aprilTag.detections[i]
             if (tag.id == id) {
-                targetHeading = orientation.yaw + tag.ftcPose.bearing
+                targetHeading = currentHeading + tag.ftcPose.bearing
                 dist = tag.ftcPose.range
                 break
             }
         }
         return pidf.calculate(
-            orientation.yaw,
+            currentHeading,
             targetHeading
         ) * enable
     }
 
+    val tolerance = 5.0
     val aligned: Boolean
-        get() = round(imu.robotYawPitchRollAngles.yaw) == targetHeading
+        get() = abs(targetHeading - currentHeading) < tolerance
 }

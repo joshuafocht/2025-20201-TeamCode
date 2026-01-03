@@ -159,7 +159,9 @@ class DucksTeleOp : LinearOpMode() {
             telemetryJ.addData("shooter.realTPS", shooter.realTPS)
             telemetryJ.addData("shooter.realAccel", shooter.realAccel)
             telemetryJ.addData("shooter.realCurrent", shooter.realCurrent)
-
+            telemetryJ.addData("align.targetHeading", align.targetHeading)
+            telemetryJ.addData("align.targetHeading", align.currentHeading)
+            telemetryJ.addData("align.aligned", align.aligned)
         }
     }
 }

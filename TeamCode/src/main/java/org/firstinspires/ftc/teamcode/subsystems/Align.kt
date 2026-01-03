@@ -24,7 +24,7 @@ class Align(val hardwareMap: HardwareMap) {
     var targetHeading = 0.0
     var enable = 0.0
         set(value) {
-            enable = if (value != 0.0) 1.0 else 0.0
+            field = if (value != 0.0) 1.0 else 0.0
         }
 
     init {

@@ -61,7 +61,7 @@ class RedGoalAuto : LinearOpMode() {
                 BezierCurve(
                     Pose(131.500, 84.000),
                     Pose(96.000, 108.000),
-                    Pose(124.500, 128.000)
+                    Pose(128.500, 132.000)
                 )
             )
             .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(36.0))
@@ -70,7 +70,7 @@ class RedGoalAuto : LinearOpMode() {
         val driveOutPath = follower
             .pathBuilder()
             .addPath(
-                BezierLine(Pose(119.500, 128.000), Pose(96.000, 72.000))
+                BezierLine(Pose(128.500, 132.000), Pose(96.000, 72.000))
             )
             .setLinearHeadingInterpolation(Math.toRadians(36.0), Math.toRadians(0.0))
             .build()

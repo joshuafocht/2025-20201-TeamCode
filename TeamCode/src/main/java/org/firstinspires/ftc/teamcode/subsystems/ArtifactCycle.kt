@@ -51,10 +51,11 @@ class ArtifactCycle(
                 if (timer.time() >= Subsystems.ArtifactCycle.transferRunInTime) transferMotor.set(0.0)
             }
             5 -> { // Let intake run for some extra time at the end to bring the last ball in
-                if (timer.time() >= Subsystems.ArtifactCycle.intakeRunInTime) {
-                    intakeMotor.set(0.0)
-                    state++
-                }
+//                if (timer.time() >= Subsystems.ArtifactCycle.intakeRunInTime) {
+//                    intakeMotor.set(0.0)
+//                    state++
+//                }
+                state++
             }
             6 -> { // Drive to goal
                 follower.followPath(driveToGoalPath)

@@ -25,6 +25,8 @@ class Align(val hardwareMap: HardwareMap) {
     var targetHeading = 0.0
     val currentHeading
         get() = imu.robotYawPitchRollAngles.yaw
+    val tags
+        get() = aprilTag?.detections?.size!!
     var enable = 0.0
         set(value) {
             field = if (value != 0.0) 1.0 else 0.0
@@ -67,7 +69,6 @@ class Align(val hardwareMap: HardwareMap) {
         ) * enable
     }
 
-    val tolerance = 5.0
     val aligned: Boolean
-        get() = abs(targetHeading - currentHeading) < tolerance
+        get() = abs(targetHeading - currentHeading) < Subsystems.Align.tolerance
 }

@@ -87,15 +87,18 @@ object Subsystems {
     @Configurable
     object Align {
         @JvmField
-        var Kp: Double = 0.015
+        var Kp: Double = 0.1
 
         @JvmField
-        var Ki: Double = 0.0
+        var Ki: Double = 0.01
 
         @JvmField
-        var Kd: Double = 0.0
+        var Kd: Double = 0.08
 
         @JvmField
-        var Kf: Double = 0.0
+        var Kf: Double = 0.85
+
+        @JvmField
+        var tolerance: Double = 3.0
     }
 }

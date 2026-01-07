@@ -94,7 +94,7 @@ class DucksTeleOp : LinearOpMode() {
             if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
                 align.enable = 1.0
             else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-                if (align.aligned) {
+                if (align.aligned && align.tags > 0) {
                     shooter.armed = true
                 }
                 if (shooter.spunUp) {
@@ -127,18 +127,18 @@ class DucksTeleOp : LinearOpMode() {
                 shooter.armed = false
             }
 
-            if (shooterOp.isDown(GamepadKeys.Button.CROSS))
-                intakeMotor.set(1.0)
-            else if (shooterOp.isDown(GamepadKeys.Button.SQUARE))
-                intakeMotor.set(-1.0)
-            else
-                intakeMotor.set(0.0)
-            if (shooterOp.isDown(GamepadKeys.Button.CIRCLE))
-                transferMotor.set(1.0)
-            else if (shooterOp.isDown(GamepadKeys.Button.TRIANGLE))
-                transferMotor.set(-1.0)
-            else
-                transferMotor.set(0.0)
+//            if (shooterOp.isDown(GamepadKeys.Button.CROSS))
+//                intakeMotor.set(1.0)
+//            else if (shooterOp.isDown(GamepadKeys.Button.SQUARE))
+//                intakeMotor.set(-1.0)
+//            else
+//                intakeMotor.set(0.0)
+//            if (shooterOp.isDown(GamepadKeys.Button.CIRCLE))
+//                transferMotor.set(1.0)
+//            else if (shooterOp.isDown(GamepadKeys.Button.TRIANGLE))
+//                transferMotor.set(-1.0)
+//            else
+//                transferMotor.set(0.0)
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
                 shooter.armed = true
@@ -160,8 +160,10 @@ class DucksTeleOp : LinearOpMode() {
             telemetryJ.addData("shooter.realAccel", shooter.realAccel)
             telemetryJ.addData("shooter.realCurrent", shooter.realCurrent)
             telemetryJ.addData("align.targetHeading", align.targetHeading)
-            telemetryJ.addData("align.targetHeading", align.currentHeading)
+            telemetryJ.addData("align.currentHeading", align.currentHeading)
             telemetryJ.addData("align.aligned", align.aligned)
+            telemetryJ.addData("align.tags", align.tags)
+            telemetryJ.addData("align.dist", align.dist)
         }
     }
 }

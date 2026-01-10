@@ -39,10 +39,9 @@ class Shooter(val shooterMotor: MotorEx) {
 //            shooterMotor.velocity = if (armed) tps else 0.0
 //        }
 
-    var tolerance: Double = 100.0
 
     val spunUp: Boolean
-        get() = abs(tps - shooterMotor.velocity) < tolerance
+        get() = abs(tps - shooterMotor.velocity) < Subsystems.Shooter.tolerance
 
     val realTPS: Double
         get() = shooterMotor.velocity

@@ -28,6 +28,9 @@ object Subsystems {
 
         @JvmField
         var targetTPS: Double = 1150.0
+
+        @JvmField
+        var tolerance: Double = 30.0
     }
 
     @Configurable
@@ -69,7 +72,7 @@ object Subsystems {
     @Configurable
     object Align {
         @JvmField
-        var Kp: Double = 0.02
+        var Kp: Double = 0.015
 
         @JvmField
         var Ki: Double = 0.0
@@ -81,6 +84,6 @@ object Subsystems {
         var Kf: Double = 0.0
 
         @JvmField
-        var tolerance: Double = 2.0
+        var tolerance: Double = 3.0
     }
 }

@@ -75,6 +75,7 @@ class DucksTeleOp : LinearOpMode() {
             shooterOp.readButtons()
 
             shooter.update()
+            align.update()
 
             follower.setTeleOpDrive(
                 driverOp.leftY * moveMult,
@@ -94,7 +95,8 @@ class DucksTeleOp : LinearOpMode() {
             if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
                 align.enable = 1.0
             else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-                if (align.aligned && align.tags > 0) {
+                if (align.aligned) {
+                    shooter.tps = align.tps
                     shooter.armed = true
                 }
                 if (shooter.spunUp) {
@@ -108,6 +110,13 @@ class DucksTeleOp : LinearOpMode() {
                 intakeMotor.set(0.0)
                 transferMotor.set(0.0)
             }
+
+            if (driverOp.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER))
+                intakeMotor.set(1.0)
+            if (driverOp.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER))
+                intakeMotor.set(0.0)
+
+            transferMotor.set(driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER))
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
                 shooter.tps += Subsystems.Shooter.changeTPS

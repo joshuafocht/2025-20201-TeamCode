@@ -33,31 +33,13 @@ object Subsystems {
     @Configurable
     object Intake {
         @JvmField
-        var Kp: Double = 1.0
+        var shooterBackTPS: Double = -500.0
 
         @JvmField
-        var Ki: Double = 0.0
+        var transferBackPower: Double = -0.5;
 
         @JvmField
-        var Kd: Double = 0.0
-
-        @JvmField
-        var tps: Double = 50.0
-    }
-
-    @Configurable
-    object Transfer {
-        @JvmField
-        var Kp: Double = 1.0
-
-        @JvmField
-        var Ki: Double = 0.0
-
-        @JvmField
-        var Kd: Double = 0.0
-
-        @JvmField
-        var tps: Double = 50.0
+        var transferBackTime: Int = 500;
     }
 
     @Configurable
@@ -87,18 +69,18 @@ object Subsystems {
     @Configurable
     object Align {
         @JvmField
-        var Kp: Double = 0.1
+        var Kp: Double = 0.015
 
         @JvmField
-        var Ki: Double = 0.01
+        var Ki: Double = 0.0
 
         @JvmField
-        var Kd: Double = 0.08
+        var Kd: Double = 0.0
 
         @JvmField
-        var Kf: Double = 0.85
+        var Kf: Double = 0.0
 
         @JvmField
-        var tolerance: Double = 3.0
+        var tolerance: Double = 5.0
     }
 }

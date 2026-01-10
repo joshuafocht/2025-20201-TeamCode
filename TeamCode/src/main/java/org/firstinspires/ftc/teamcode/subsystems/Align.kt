@@ -69,6 +69,9 @@ class Align(val hardwareMap: HardwareMap) {
         ) * enable
     }
 
+    val tps
+        get() = 6.15 * dist + 1100.0
+
     val aligned: Boolean
-        get() = abs(targetHeading - currentHeading) < Subsystems.Align.tolerance
+        get() = abs(targetHeading - currentHeading) < Subsystems.Align.tolerance && tags > 0
 }

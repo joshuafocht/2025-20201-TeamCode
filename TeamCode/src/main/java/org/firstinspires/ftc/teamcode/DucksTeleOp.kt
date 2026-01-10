@@ -102,6 +102,9 @@ class DucksTeleOp : LinearOpMode() {
                 if (shooter.spunUp) {
                     intakeMotor.set(1.0)
                     transferMotor.set(1.0)
+                } else {
+                    intakeMotor.set(0.0)
+                    transferMotor.set(0.0)
                 }
             }
             else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {

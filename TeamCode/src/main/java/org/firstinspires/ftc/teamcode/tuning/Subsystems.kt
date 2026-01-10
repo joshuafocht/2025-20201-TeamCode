@@ -6,7 +6,7 @@ object Subsystems {
     @Configurable
     object Shooter {
         @JvmField
-        var Kp: Double = 5.0
+        var Kp: Double = 7.5
 
         @JvmField
         var Ki: Double = 0.0
@@ -69,7 +69,7 @@ object Subsystems {
     @Configurable
     object Align {
         @JvmField
-        var Kp: Double = 0.015
+        var Kp: Double = 0.02
 
         @JvmField
         var Ki: Double = 0.0
@@ -81,6 +81,6 @@ object Subsystems {
         var Kf: Double = 0.0
 
         @JvmField
-        var tolerance: Double = 5.0
+        var tolerance: Double = 2.0
     }
 }

@@ -119,7 +119,7 @@ class DucksTeleOp : LinearOpMode() {
             if (driverOp.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER))
                 intakeMotor.set(0.0)
 
-            transferMotor.set(-driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 2)
+//            transferMotor.set(-driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 2)
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
                 shooter.tps += Subsystems.Shooter.changeTPS

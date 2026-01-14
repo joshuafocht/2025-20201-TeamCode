@@ -10,10 +10,11 @@ import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 import kotlin.math.abs
-import kotlin.math.round
 
 class Align(val hardwareMap: HardwareMap) {
-    val aprilTag: AprilTagProcessor? = AprilTagProcessor.Builder().build()
+    var aprilTag: AprilTagProcessor
+    var visionPortal: VisionPortal
+
     val imu: IMU = hardwareMap.get(IMU::class.java, "imu")
     val pidf: PIDFController = PIDFController(
         Subsystems.Align.Kp,
@@ -26,7 +27,7 @@ class Align(val hardwareMap: HardwareMap) {
     val currentHeading
         get() = imu.robotYawPitchRollAngles.yaw
     val tags
-        get() = aprilTag?.detections?.size!!
+        get() = aprilTag.detections?.size!!
     var enable = 0.0
         set(value) {
             field = if (value != 0.0) 1.0 else 0.0
@@ -38,11 +39,13 @@ class Align(val hardwareMap: HardwareMap) {
         val orientationOnRobot = RevHubOrientationOnRobot(logoDirection, usbDirection)
         imu.initialize(IMU.Parameters(orientationOnRobot))
 
+        aprilTag = AprilTagProcessor.Builder().build()
+
         val builder: VisionPortal.Builder = VisionPortal.Builder()
         builder.setCamera(hardwareMap.get(WebcamName::class.java, "Webcam 1"))
         builder.addProcessor(aprilTag)
 
-        val visionPortal: VisionPortal = builder.build()
+        visionPortal = builder.build()
     }
 
     fun update() {
@@ -52,10 +55,12 @@ class Align(val hardwareMap: HardwareMap) {
             Subsystems.Align.Kd,
             Subsystems.Align.Kf
         )
+        if (enable == 1.0) visionPortal.stopStreaming()
+        else visionPortal.resumeStreaming()
     }
 
     fun align(id: Int): Double {
-        for (i in aprilTag?.detections?.indices!!) {
+        for (i in aprilTag.detections?.indices!!) {
             val tag = aprilTag.detections[i]
             if (tag.id == id) {
                 targetHeading = currentHeading + tag.ftcPose.bearing
@@ -70,7 +75,7 @@ class Align(val hardwareMap: HardwareMap) {
     }
 
     val tps
-        get() = 6.15 * dist + 1100.0
+        get() = Subsystems.Align.m * dist + Subsystems.Align.b
 
     val aligned: Boolean
         get() = abs(targetHeading - currentHeading) < Subsystems.Align.tolerance && tags > 0

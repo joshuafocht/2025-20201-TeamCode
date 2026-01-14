@@ -5,7 +5,6 @@ import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.seattlesolvers.solverslib.drivebase.MecanumDrive
 import com.seattlesolvers.solverslib.gamepad.GamepadEx
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys
 import com.seattlesolvers.solverslib.hardware.motors.Motor
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Align
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import kotlin.math.abs
-import kotlin.math.truncate
 
 @TeleOp
 class DucksTeleOp : LinearOpMode() {

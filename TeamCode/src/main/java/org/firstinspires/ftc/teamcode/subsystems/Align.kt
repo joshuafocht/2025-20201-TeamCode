@@ -26,8 +26,8 @@ class Align(val hardwareMap: HardwareMap) {
     var targetHeading = 0.0
     val currentHeading
         get() = imu.robotYawPitchRollAngles.yaw
-    val tags
-        get() = aprilTag.detections?.size!!
+    var tags = 0
+//        get() = aprilTag.detections?.size!!
     var enable = 0.0
         set(value) {
             field = if (value != 0.0) 1.0 else 0.0
@@ -55,16 +55,16 @@ class Align(val hardwareMap: HardwareMap) {
             Subsystems.Align.Kd,
             Subsystems.Align.Kf
         )
-        if (enable == 1.0) visionPortal.stopStreaming()
-        else visionPortal.resumeStreaming()
     }
 
     fun align(id: Int): Double {
         for (i in aprilTag.detections?.indices!!) {
             val tag = aprilTag.detections[i]
+            tags = 0
             if (tag.id == id) {
                 targetHeading = currentHeading + tag.ftcPose.bearing
                 dist = tag.ftcPose.range
+                tags++
                 break
             }
         }

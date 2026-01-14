@@ -84,12 +84,12 @@ object Subsystems {
         var Kf: Double = 0.0
 
         @JvmField
-        var m: Double = 6.15
+        var m: Double = 6.2
 
         @JvmField
         var b: Double = 1100.0
 
         @JvmField
-        var tolerance: Double = 3.0
+        var tolerance: Double = 2.0
     }
 }

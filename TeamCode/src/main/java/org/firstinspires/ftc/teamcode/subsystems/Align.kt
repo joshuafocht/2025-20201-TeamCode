@@ -6,6 +6,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.IMU
 import com.seattlesolvers.solverslib.controller.PIDFController
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
+import org.firstinspires.ftc.robotcore.external.navigation.Position
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
@@ -62,7 +66,7 @@ class Align(val hardwareMap: HardwareMap) {
             val tag = aprilTag.detections[i]
             tags = 0
             if (tag.id == id) {
-                targetHeading = currentHeading + tag.ftcPose.bearing
+                targetHeading = currentHeading - tag.ftcPose.bearing // add if camera upright subtract if upside down
                 dist = tag.ftcPose.range
                 tags++
                 break

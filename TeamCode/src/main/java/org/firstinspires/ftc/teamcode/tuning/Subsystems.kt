@@ -24,7 +24,7 @@ object Subsystems {
         var Ka: Double = 0.0
 
         @JvmField
-        var changeTPS: Double = 50.0
+        var changeTPS: Double = 10.0
 
         @JvmField
         var targetTPS: Double = 1150.0

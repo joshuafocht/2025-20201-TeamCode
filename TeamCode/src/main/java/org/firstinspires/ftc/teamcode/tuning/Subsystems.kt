@@ -31,6 +31,12 @@ object Subsystems {
 
         @JvmField
         var tolerance: Double = 30.0
+
+        @JvmField
+        var transferSpeed: Double = 0.75
+
+        @JvmField
+        var intakeSpeed: Double = 1.0
     }
 
     @Configurable

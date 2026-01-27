@@ -12,6 +12,7 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystems.Align
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
+import org.firstinspires.ftc.teamcode.tuning.RGB
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import kotlin.math.abs
 
@@ -21,21 +22,11 @@ class DucksTeleOp : LinearOpMode() {
         val telemetryM = PanelsTelemetry.telemetry
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
 
-//        val frontLeftMotor = MotorEx(hardwareMap, "frontLeftMotor")
-//        val frontRightMotor = MotorEx(hardwareMap, "frontRightMotor")
-//        val backLeftMotor = MotorEx(hardwareMap, "backLeftMotor")
-//        val backRightMotor = MotorEx(hardwareMap, "backRightMotor")
-//
-//        frontLeftMotor.inverted = true
-//        backLeftMotor.inverted = true
-//
-//        val drive = MecanumDrive(
-//            false,
-//            frontLeftMotor,
-//            frontRightMotor,
-//            backLeftMotor,
-//            backRightMotor
-//        )
+        val leftRGB = hardwareMap.servo.get("leftRGB")
+        val rightRGB = hardwareMap.servo.get("rightRGB")
+
+        var leftColor = RGB.OFF
+        var rightColor = RGB.OFF
 
         val follower = Constants.createFollower(hardwareMap)
         follower.activateAllPIDFs()
@@ -96,26 +87,46 @@ class DucksTeleOp : LinearOpMode() {
                 if (align.aligned) {
                     shooter.tps = align.tps
                     shooter.armed = true
+                } else {
+                    shooter.armed = false
                 }
                 if (shooter.spunUp) {
-                    intakeMotor.set(1.0)
-                    transferMotor.set(1.0)
+                    intakeMotor.set(Subsystems.Shooter.intakeSpeed)
+                    transferMotor.set(Subsystems.Shooter.transferSpeed)
                 } else {
                     intakeMotor.set(0.0)
                     transferMotor.set(0.0)
                 }
-            }
-            else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
+            } else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
                 align.enable = 0.0
                 shooter.armed = false
                 intakeMotor.set(0.0)
                 transferMotor.set(0.0)
             }
 
-            if (driverOp.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER))
+            if (driverOp.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
                 intakeMotor.set(1.0)
-            if (driverOp.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER))
+                shooter.tps = -1000.0
+                shooter.armed = true
+            }
+            if (driverOp.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
                 intakeMotor.set(0.0)
+                shooter.armed = false
+            }
+
+            if (align.tags > 0 && align.aligned)
+                leftColor = RGB.GREEN
+            else if (align.tags <= 0 && align.aligned)
+                leftColor = RGB.PURPLE
+            else if (align.tags > 0 && !align.aligned)
+                leftColor = RGB.ORANGE
+            else
+                leftColor = RGB.RED
+
+            if (shooter.spunUp)
+                rightColor = RGB.GREEN
+            else
+                rightColor = RGB.RED
 
 //            transferMotor.set(-driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 2)
 
@@ -162,6 +173,9 @@ class DucksTeleOp : LinearOpMode() {
                 intakeMotor.set(0.0)
                 transferMotor.set(0.0)
             }
+
+            leftRGB.position = leftColor.pos
+            rightRGB.position = rightColor.pos
 
             telemetryJ.addData("shooter.armed", shooter.armed)
             telemetryJ.addData("shooter.spunUp", shooter.spunUp)

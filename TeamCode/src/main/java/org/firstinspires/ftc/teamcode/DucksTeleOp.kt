@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystems.Align
+import org.firstinspires.ftc.teamcode.subsystems.Intake
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 import org.firstinspires.ftc.teamcode.tuning.RGB
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
@@ -48,6 +49,8 @@ class DucksTeleOp : LinearOpMode() {
 
         val align = Align(hardwareMap)
 
+        val intake = Intake(intakeMotor, transferMotor, shooter)
+
         transferMotor.inverted = true
 
         val driverOp = GamepadEx(gamepad1)
@@ -64,6 +67,7 @@ class DucksTeleOp : LinearOpMode() {
             shooterOp.readButtons()
 
             shooter.update()
+            intake.update(driverOp.getButton(GamepadKeys.Button.LEFT_BUMPER))
             align.update()
 
             follower.setTeleOpDrive(
@@ -104,15 +108,15 @@ class DucksTeleOp : LinearOpMode() {
                 transferMotor.set(0.0)
             }
 
-            if (driverOp.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
-                intakeMotor.set(1.0)
-                shooter.tps = -1000.0
-                shooter.armed = true
-            }
-            if (driverOp.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
-                intakeMotor.set(0.0)
-                shooter.armed = false
-            }
+//            if (driverOp.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
+//                intakeMotor.set(1.0)
+//                shooter.tps = -1000.0
+//                shooter.armed = true
+//            }
+//            if (driverOp.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
+//                intakeMotor.set(0.0)
+//                shooter.armed = false
+//            }
 
             if (align.tags > 0 && align.aligned)
                 leftColor = RGB.GREEN

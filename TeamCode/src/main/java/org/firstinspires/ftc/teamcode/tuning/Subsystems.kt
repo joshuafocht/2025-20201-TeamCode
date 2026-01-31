@@ -30,7 +30,7 @@ object Subsystems {
         var targetTPS: Double = 1150.0
 
         @JvmField
-        var tolerance: Double = 30.0
+        var tolerance: Double = 100.0
 
         @JvmField
         var transferSpeed: Double = 0.75
@@ -45,10 +45,19 @@ object Subsystems {
         var shooterBackTPS: Double = -500.0
 
         @JvmField
-        var transferBackPower: Double = -0.5;
+        var intakeInPower: Double = 1.0
 
         @JvmField
-        var transferBackTime: Int = 500;
+        var transferInPower: Double = 0.0
+
+        @JvmField
+        var intakeOutPower: Double = 0.0
+
+        @JvmField
+        var transferOutPower: Double = -0.5
+
+        @JvmField
+        var transferBackOffTime: Int = 750
     }
 
     @Configurable

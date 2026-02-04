@@ -54,10 +54,10 @@ object Subsystems {
         var intakeOutPower: Double = 0.0
 
         @JvmField
-        var transferOutPower: Double = -0.5
+        var transferOutPower: Double = -1.0
 
         @JvmField
-        var transferBackOffTime: Int = 750
+        var transferBackOffTime: Int = 500
     }
 
     @Configurable

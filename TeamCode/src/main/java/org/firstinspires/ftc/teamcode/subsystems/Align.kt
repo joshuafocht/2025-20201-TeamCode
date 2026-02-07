@@ -33,7 +33,7 @@ class Align(val hardwareMap: HardwareMap) {
     var tags = 0
 //        get() = aprilTag.detections?.size!!
 
-    var offset = 0;
+    var offset: Double = 0.0
 
     var enable = 0.0
         set(value) {
@@ -55,7 +55,7 @@ class Align(val hardwareMap: HardwareMap) {
         visionPortal = builder.build()
     }
 
-    fun update(offset: Int) {
+    fun update(offset: Double) {
         pidf.setPIDF(
             Subsystems.Align.Kp,
             Subsystems.Align.Ki,

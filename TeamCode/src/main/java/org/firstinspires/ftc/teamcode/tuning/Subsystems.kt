@@ -42,6 +42,8 @@ object Subsystems {
     @Configurable
     object Intake {
         @JvmField
+        var spinUpTimeOut: Double = 2000.0
+        @JvmField
         var shooterBackTPS: Double = -500.0
 
         @JvmField

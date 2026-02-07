@@ -20,7 +20,10 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
     fun update(run: Boolean) {
         when (state) {
             IntakeStates.IDLE -> {
-                if (run) state = IntakeStates.SPIN_UP
+                if (run) {
+                    state = IntakeStates.SPIN_UP
+                    timer.reset()
+                }
             }
             IntakeStates.SPIN_UP -> {
                 intakeMotor.set(Subsystems.Intake.intakeInPower)
@@ -29,7 +32,15 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
                 shooter.tps = Subsystems.Intake.shooterBackTPS
                 shooter.armed = true
 
-                if (shooter.spunUp) state = IntakeStates.SPIN_BACK
+                if (shooter.spunUp) {
+                    state = IntakeStates.SPIN_BACK
+                    timer.reset()
+                }
+
+                if (!shooter.spunUp && timer.time() > Subsystems.Intake.spinUpTimeOut) {
+                    state = IntakeStates.BACK_OFF
+                    timer.reset()
+                }
             }
             IntakeStates.SPIN_BACK -> {
                 if (!shooter.spunUp) {

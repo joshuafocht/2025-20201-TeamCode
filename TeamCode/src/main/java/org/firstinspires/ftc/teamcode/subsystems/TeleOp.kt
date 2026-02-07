@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.tuning.RGB
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import kotlin.math.abs
 
-class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: Gamepad, gamepad2: Gamepad, val tagId: Int, val tagOffset: Int) {
+class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: Gamepad, gamepad2: Gamepad, val tagId: () -> Int, val tagOffset: () -> Int) {
         val telemetryM = PanelsTelemetry.telemetry
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
 
@@ -61,12 +61,12 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
         shooter.update()
         intake.update(driverOp.getButton(GamepadKeys.Button.LEFT_BUMPER))
-        align.update(tagOffset)
+        align.update(tagOffset())
 
         follower.setTeleOpDrive(
             driverOp.leftY * moveMult,
             -driverOp.leftX * moveMult,
-            (-driverOp.rightX * turnMult) + align.align(tagId)
+            (-driverOp.rightX * turnMult) + align.align(tagId())
         )
 
         if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))

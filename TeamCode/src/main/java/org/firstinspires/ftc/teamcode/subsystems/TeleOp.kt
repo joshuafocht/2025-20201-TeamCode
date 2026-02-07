@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.tuning.RGB
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import kotlin.math.abs
 
-class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: Gamepad, gamepad2: Gamepad, val tagId: () -> Int, val tagOffset: () -> Double) {
+class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: Gamepad, gamepad2: Gamepad, val tagId: Int, val tagOffset: () -> Double) {
         val telemetryM = PanelsTelemetry.telemetry
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
 
@@ -34,7 +34,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
 
         val shooter = Shooter(shooterMotor)
-        val align = Align(hardwareMap)
+        val align = Align(hardwareMap, tagId)
         val intake = Intake(intakeMotor, transferMotor, shooter)
 
         val driverOp = GamepadEx(gamepad1)
@@ -65,13 +65,15 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         shooterOp.readButtons()
 
         shooter.update()
-        intake.update(driverOp.getButton(GamepadKeys.Button.LEFT_BUMPER))
-        align.update(tagOffset())
+        intake.update()
+        align.update()
+
+        align.offset = tagOffset()
 
         follower.setTeleOpDrive(
             driverOp.leftY * moveMult,
             -driverOp.leftX * moveMult,
-            (-driverOp.rightX * turnMult) + align.align(tagId())
+            (-driverOp.rightX * turnMult) + align.power
         )
 
         if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
@@ -83,14 +85,16 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         if (driverOp.wasJustPressed(GamepadKeys.Button.CROSS))
             turnMult -= 0.05
 
+        intake.enabled = driverOp.isDown(GamepadKeys.Button.LEFT_BUMPER)
+
         if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
-            align.enable = 1.0
+            align.enabled = true
         else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
             if (align.aligned) {
                 shooter.tps = align.tps
-                shooter.armed = true
+                shooter.enabled = true
             } else {
-                shooter.armed = false
+                shooter.enabled = false
             }
             if (shooter.spunUp) {
                 intakeMotor.set(Subsystems.Shooter.intakeSpeed)
@@ -100,8 +104,8 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
                 transferMotor.set(0.0)
             }
         } else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-            align.enable = 0.0
-            shooter.armed = false
+            align.enabled = false
+            shooter.enabled = false
             intakeMotor.set(0.0)
             transferMotor.set(0.0)
         }
@@ -127,26 +131,26 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
         if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
             shooter.tps = abs(shooter.tps)
-            shooter.armed = !shooter.armed
+            shooter.enabled = !shooter.enabled
         }
 
         if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
             shooter.tps = -abs(shooter.tps)
-            shooter.armed = true
+            shooter.enabled = true
         } else if (shooterOp.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
             shooter.tps = abs(shooter.tps)
-            shooter.armed = false
+            shooter.enabled = false
         }
 
         if (shooterOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
-            shooter.armed = true
+            shooter.enabled = true
         } else if (shooterOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
             if (shooter.spunUp) {
                 intakeMotor.set(1.0)
                 transferMotor.set(1.0)
             }
         } else if (shooterOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-            shooter.armed = false
+            shooter.enabled = false
             intakeMotor.set(0.0)
             transferMotor.set(0.0)
         }
@@ -154,7 +158,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         leftRGB.position = leftColor.pos
         rightRGB.position = rightColor.pos
 
-        telemetryJ.addData("shooter.armed", shooter.armed)
+        telemetryJ.addData("shooter.enabled", shooter.enabled)
         telemetryJ.addData("shooter.spunUp", shooter.spunUp)
         telemetryJ.addData("shooter.tps", shooter.tps)
         telemetryJ.addData("shooter.realTPS", shooter.realTPS)

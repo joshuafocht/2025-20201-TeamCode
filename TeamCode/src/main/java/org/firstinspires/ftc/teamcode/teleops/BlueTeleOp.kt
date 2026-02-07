@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.tuning.Subsystems.BlueTeleOp
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 class BlueTeleOp : LinearOpMode() {
     override fun runOpMode() {
-        val teleOp = TeleOp(hardwareMap, telemetry, gamepad1, gamepad2, { BlueTeleOp.tagId }, { BlueTeleOp.tagOffset })
+        val teleOp = TeleOp(hardwareMap, telemetry, gamepad1, gamepad2, 20, { BlueTeleOp.tagOffset })
         waitForStart()
         teleOp.start()
         while (opModeIsActive()) {

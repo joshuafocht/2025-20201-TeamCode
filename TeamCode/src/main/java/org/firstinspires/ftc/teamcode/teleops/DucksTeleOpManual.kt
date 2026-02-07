@@ -39,7 +39,7 @@ class DucksTeleOpManual : LinearOpMode() {
 
         val shooter = Shooter(shooterMotor)
 
-        val align = Align(hardwareMap)
+        val align = Align(hardwareMap, 20)
 
         transferMotor.inverted = true
 
@@ -61,13 +61,13 @@ class DucksTeleOpManual : LinearOpMode() {
             follower.setTeleOpDrive(
                 driverOp.leftY * moveMult,
                 -driverOp.leftX * moveMult,
-                (-driverOp.rightX * turnMult) + align.align(20)
+                (-driverOp.rightX * turnMult) + align.power
             )
 
             if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER))
-                align.enable = 1.0
+                align.enabled = true
             else
-                align.enable = 0.0
+                align.enabled = true
 
             if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
                 moveMult += 0.05
@@ -85,15 +85,15 @@ class DucksTeleOpManual : LinearOpMode() {
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
                 shooter.tps = abs(shooter.tps)
-                shooter.armed = !shooter.armed
+                shooter.enabled = !shooter.enabled
             }
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
                 shooter.tps = -abs(shooter.tps)
-                shooter.armed = true
+                shooter.enabled = true
             } else if (shooterOp.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
                 shooter.tps = abs(shooter.tps)
-                shooter.armed = false
+                shooter.enabled = false
             }
 
             if (shooterOp.isDown(GamepadKeys.Button.CROSS))
@@ -110,19 +110,19 @@ class DucksTeleOpManual : LinearOpMode() {
                 transferMotor.set(0.0)
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
-                shooter.armed = true
+                shooter.enabled = true
             } else if (shooterOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
                 if (shooter.spunUp) {
                     intakeMotor.set(1.0)
                     transferMotor.set(1.0)
                 }
             } else if (shooterOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-                shooter.armed = false
+                shooter.enabled = false
                 intakeMotor.set(0.0)
                 transferMotor.set(0.0)
             }
 
-            telemetryJ.addData("shooter.armed", shooter.armed)
+            telemetryJ.addData("shooter.enabled", shooter.enabled)
             telemetryJ.addData("shooter.spunUp", shooter.spunUp)
             telemetryJ.addData("shooter.tps", shooter.tps)
             telemetryJ.addData("shooter.realTPS", shooter.realTPS)

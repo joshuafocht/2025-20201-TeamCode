@@ -6,16 +6,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.IMU
 import com.seattlesolvers.solverslib.controller.PIDFController
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
-import org.firstinspires.ftc.robotcore.external.navigation.Position
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 import kotlin.math.abs
 
-class Align(val hardwareMap: HardwareMap) {
+class Align(val hardwareMap: HardwareMap, val id: Int) {
     var aprilTag: AprilTagProcessor
     var visionPortal: VisionPortal
 
@@ -31,14 +27,15 @@ class Align(val hardwareMap: HardwareMap) {
     val currentHeading
         get() = imu.robotYawPitchRollAngles.yaw
     var tags = 0
-//        get() = aprilTag.detections?.size!!
-
     var offset: Double = 0.0
+    var power: Double = 0.0
+    var enabled: Boolean = false
 
-    var enable = 0.0
-        set(value) {
-            field = if (value != 0.0) 1.0 else 0.0
-        }
+    val tps
+        get() = Subsystems.Align.m * dist + Subsystems.Align.b
+
+    val aligned: Boolean
+        get() = abs(targetHeading - currentHeading) < Subsystems.Align.tolerance && tags > 0
 
     init {
         val logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP
@@ -55,36 +52,27 @@ class Align(val hardwareMap: HardwareMap) {
         visionPortal = builder.build()
     }
 
-    fun update(offset: Double) {
+    fun update() {
         pidf.setPIDF(
             Subsystems.Align.Kp,
             Subsystems.Align.Ki,
             Subsystems.Align.Kd,
             Subsystems.Align.Kf
         )
-        this.offset = offset
-    }
-
-    fun align(id: Int): Double {
-        for (i in aprilTag.detections?.indices!!) {
-            val tag = aprilTag.detections[i]
-            tags = 0
-            if (tag.id == id) {
-                targetHeading = currentHeading - tag.ftcPose.bearing + offset // add if camera upright subtract if upside down
-                dist = tag.ftcPose.range
-                tags++
-                break
+        if (enabled) {
+            for (i in aprilTag.detections?.indices!!) {
+                val tag = aprilTag.detections[i]
+                tags = 0
+                if (tag.id == id) {
+                    targetHeading = currentHeading - tag.ftcPose.bearing + offset // add if camera upright subtract if upside down
+                    dist = tag.ftcPose.range
+                    tags++
+                    break
+                }
             }
+            power = pidf.calculate(currentHeading, targetHeading)
+        } else {
+            power = 0.0
         }
-        return pidf.calculate(
-            currentHeading,
-            targetHeading
-        ) * enable
     }
-
-    val tps
-        get() = Subsystems.Align.m * dist + Subsystems.Align.b
-
-    val aligned: Boolean
-        get() = abs(targetHeading - currentHeading) < Subsystems.Align.tolerance && tags > 0
 }

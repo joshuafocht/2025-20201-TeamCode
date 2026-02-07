@@ -23,20 +23,20 @@ class Shooter(val shooterMotor: MotorEx) {
             Subsystems.Shooter.Kv,
             Subsystems.Shooter.Ka
         )
-        if (armed) shooterMotor.velocity = tps
+        if (enabled) shooterMotor.velocity = tps
         else shooterMotor.velocity = 0.0
     }
 
     var tps: Double = Subsystems.Shooter.targetTPS
 //        set(value) {
 //            field = value
-//            shooterMotor.velocity = if (armed) tps else 0.0
+//            shooterMotor.velocity = if (enabled) tps else 0.0
 //        }
 
-    var armed: Boolean = false
+    var enabled: Boolean = false
 //        set(value) {
 //            field = value
-//            shooterMotor.velocity = if (armed) tps else 0.0
+//            shooterMotor.velocity = if (enabled) tps else 0.0
 //        }
 
 

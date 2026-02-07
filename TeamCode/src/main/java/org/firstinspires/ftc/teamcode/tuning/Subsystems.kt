@@ -24,6 +24,9 @@ object Subsystems {
         var Ka: Double = 0.0
 
         @JvmField
+        var shootTime: Double = 2000.0
+
+        @JvmField
         var changeTPS: Double = 10.0
 
         @JvmField
@@ -113,17 +116,11 @@ object Subsystems {
     @Configurable
     object BlueTeleOp {
         @JvmField
-        var tagId = 20
-
-        @JvmField
         var tagOffset = -0.5
     }
 
     @Configurable
     object RedTeleOp {
-        @JvmField
-        var tagId = 24
-
         @JvmField
         var tagOffset = 0.5
     }

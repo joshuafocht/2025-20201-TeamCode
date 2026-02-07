@@ -16,11 +16,12 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
 
     var timer: ElapsedTime = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
     var state: IntakeStates = IntakeStates.IDLE
+    var enabled: Boolean = false
     
-    fun update(run: Boolean) {
+    fun update() {
         when (state) {
             IntakeStates.IDLE -> {
-                if (run) {
+                if (enabled) {
                     state = IntakeStates.SPIN_UP
                     timer.reset()
                 }
@@ -30,7 +31,7 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
                 transferMotor.set(Subsystems.Intake.transferInPower)
 
                 shooter.tps = Subsystems.Intake.shooterBackTPS
-                shooter.armed = true
+                shooter.enabled = true
 
                 if (shooter.spunUp) {
                     state = IntakeStates.SPIN_BACK
@@ -44,7 +45,7 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
             }
             IntakeStates.SPIN_BACK -> {
                 if (!shooter.spunUp) {
-                    shooter.armed = false
+                    shooter.enabled = false
                     state = IntakeStates.BACK_OFF
                     timer.reset()
                 }
@@ -59,7 +60,7 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
                 }
             }
             IntakeStates.FINISH -> {
-                if (!run) state = IntakeStates.IDLE
+                if (!enabled) state = IntakeStates.IDLE
             }
         }
     }

@@ -9,6 +9,7 @@ class RedTeleOp : LinearOpMode() {
     override fun runOpMode() {
         val teleOp = TeleOp(hardwareMap, telemetry, gamepad1, gamepad2, { RedTeleOp.tagId }, { RedTeleOp.tagOffset })
         waitForStart()
+        teleOp.start()
         while (opModeIsActive()) {
             teleOp.loop()
         }

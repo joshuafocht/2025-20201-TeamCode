@@ -51,6 +51,11 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         transferMotor.inverted = true
     }
 
+    fun start() {
+        follower.startTeleOpDrive(true)
+        follower.update()
+    }
+
     fun loop() {
         telemetryM.update()
         telemetryJ.update()

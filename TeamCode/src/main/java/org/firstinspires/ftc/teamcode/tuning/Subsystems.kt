@@ -107,4 +107,22 @@ object Subsystems {
         @JvmField
         var tolerance: Double = 2.0
     }
+
+    @Configurable
+    object BlueTeleOp {
+        @JvmField
+        var tagId = 20
+
+        @JvmField
+        var tagOffset = -1
+    }
+
+    @Configurable
+    object RedTeleOp {
+        @JvmField
+        var tagId = 24
+
+        @JvmField
+        var tagOffset = 1
+    }
 }

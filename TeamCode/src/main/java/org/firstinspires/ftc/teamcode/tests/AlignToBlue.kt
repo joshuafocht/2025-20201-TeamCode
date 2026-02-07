@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode.tests
 
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.Pose
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot.UsbFacingDirection
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.IMU
@@ -23,7 +22,7 @@ class AlignToBlue : LinearOpMode() {
 
         val imu: IMU = hardwareMap.get(IMU::class.java, "imu")
         val logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP
-        val usbDirection = UsbFacingDirection.RIGHT
+        val usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
         val orientationOnRobot = RevHubOrientationOnRobot(logoDirection, usbDirection)
         imu.initialize(IMU.Parameters(orientationOnRobot))
         var targetHeading = 0.0;

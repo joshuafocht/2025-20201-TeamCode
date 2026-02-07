@@ -32,6 +32,9 @@ class Align(val hardwareMap: HardwareMap) {
         get() = imu.robotYawPitchRollAngles.yaw
     var tags = 0
 //        get() = aprilTag.detections?.size!!
+
+    var offset = 0;
+
     var enable = 0.0
         set(value) {
             field = if (value != 0.0) 1.0 else 0.0
@@ -52,13 +55,14 @@ class Align(val hardwareMap: HardwareMap) {
         visionPortal = builder.build()
     }
 
-    fun update() {
+    fun update(offset: Int) {
         pidf.setPIDF(
             Subsystems.Align.Kp,
             Subsystems.Align.Ki,
             Subsystems.Align.Kd,
             Subsystems.Align.Kf
         )
+        this.offset = offset
     }
 
     fun align(id: Int): Double {
@@ -66,7 +70,7 @@ class Align(val hardwareMap: HardwareMap) {
             val tag = aprilTag.detections[i]
             tags = 0
             if (tag.id == id) {
-                targetHeading = currentHeading - tag.ftcPose.bearing // add if camera upright subtract if upside down
+                targetHeading = currentHeading - tag.ftcPose.bearing + offset // add if camera upright subtract if upside down
                 dist = tag.ftcPose.range
                 tags++
                 break

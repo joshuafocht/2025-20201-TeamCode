@@ -50,7 +50,7 @@ object Subsystems {
         var intakeInPower: Double = 1.0
 
         @JvmField
-        var transferInPower: Double = 0.0
+        var transferInPower: Double = 0.1
 
         @JvmField
         var intakeOutPower: Double = 0.0
@@ -89,13 +89,13 @@ object Subsystems {
     @Configurable
     object Align {
         @JvmField
-        var Kp: Double = 0.015
+        var Kp: Double = 0.013
 
         @JvmField
-        var Ki: Double = 0.0
+        var Ki: Double = 0.055
 
         @JvmField
-        var Kd: Double = 0.0
+        var Kd: Double = 0.002
 
         @JvmField
         var Kf: Double = 0.0
@@ -116,7 +116,7 @@ object Subsystems {
         var tagId = 20
 
         @JvmField
-        var tagOffset = -1
+        var tagOffset = -0.5
     }
 
     @Configurable
@@ -125,6 +125,6 @@ object Subsystems {
         var tagId = 24
 
         @JvmField
-        var tagOffset = 1
+        var tagOffset = 0.5
     }
 }

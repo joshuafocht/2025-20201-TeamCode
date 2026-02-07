@@ -27,7 +27,7 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
             }
             IntakeStates.SPIN_UP -> {
                 intakeMotor.set(Subsystems.Intake.intakeInPower)
-                transferMotor.set(Subsystems.Intake.intakeOutPower)
+                transferMotor.set(Subsystems.Intake.transferInPower)
 
                 shooter.tps = Subsystems.Intake.shooterBackTPS
                 shooter.armed = true

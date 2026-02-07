@@ -108,16 +108,6 @@ class DucksTeleOp : LinearOpMode() {
                 transferMotor.set(0.0)
             }
 
-//            if (driverOp.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
-//                intakeMotor.set(1.0)
-//                shooter.tps = -1000.0
-//                shooter.armed = true
-//            }
-//            if (driverOp.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
-//                intakeMotor.set(0.0)
-//                shooter.armed = false
-//            }
-
             if (align.tags > 0 && align.aligned)
                 leftColor = RGB.GREEN
             else if (align.tags <= 0 && align.aligned)
@@ -131,8 +121,6 @@ class DucksTeleOp : LinearOpMode() {
                 rightColor = RGB.GREEN
             else
                 rightColor = RGB.RED
-
-//            transferMotor.set(-driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 2)
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
                 shooter.tps += Subsystems.Shooter.changeTPS
@@ -151,19 +139,6 @@ class DucksTeleOp : LinearOpMode() {
                 shooter.tps = abs(shooter.tps)
                 shooter.armed = false
             }
-
-//            if (shooterOp.isDown(GamepadKeys.Button.CROSS))
-//                intakeMotor.set(1.0)
-//            else if (shooterOp.isDown(GamepadKeys.Button.SQUARE))
-//                intakeMotor.set(-1.0)
-//            else
-//                intakeMotor.set(0.0)
-//            if (shooterOp.isDown(GamepadKeys.Button.CIRCLE))
-//                transferMotor.set(1.0)
-//            else if (shooterOp.isDown(GamepadKeys.Button.TRIANGLE))
-//                transferMotor.set(-1.0)
-//            else
-//                transferMotor.set(0.0)
 
             if (shooterOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
                 shooter.armed = true

@@ -33,7 +33,7 @@ class BlueGoalAuto : LinearOpMode() {
         val follower = Constants.createFollower(hardwareMap)
         follower.setStartingPose(Pose(32.0, 134.5, Math.toRadians(270.0)))
 
-        val driveToGoalStartPath = follower
+        val driveToGoal0Path = follower
             .pathBuilder()
             .addPath(
             BezierLine(
@@ -45,7 +45,7 @@ class BlueGoalAuto : LinearOpMode() {
             .setLinearHeadingInterpolation(Math.toRadians(270.0), Math.toRadians(135.0))
             .build();
 
-        val driveToArtifactPath = follower
+        val driveToArtifact1Path = follower
             .pathBuilder()
             .addPath(
                 BezierLine(
@@ -56,7 +56,7 @@ class BlueGoalAuto : LinearOpMode() {
             .setLinearHeadingInterpolation(Math.toRadians(135.0), Math.toRadians(180.0))
             .build();
 
-        val pickupArtifactPath = follower
+        val pickupArtifact1Path = follower
             .pathBuilder()
             .addPath(
             BezierLine(
@@ -67,7 +67,7 @@ class BlueGoalAuto : LinearOpMode() {
             .setConstantHeadingInterpolation(Math.toRadians(180.0))
             .build();
 
-        val driveToGoalPath = follower
+        val driveToGoal1Path = follower
             .pathBuilder()
             .addPath(
             BezierLine(
@@ -93,7 +93,7 @@ class BlueGoalAuto : LinearOpMode() {
             BezierLine(
                 Pose(48.000, 60.000),
 
-                Pose(20.000, 60.000)
+                Pose(16.000, 60.000)
                 )
             )
             .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(180.0))
@@ -101,9 +101,9 @@ class BlueGoalAuto : LinearOpMode() {
 
         val cycle = ArtifactCycle(
             follower,
-            driveToArtifactPath,
-            pickupArtifactPath,
-            driveToGoalPath,
+            driveToArtifact1Path,
+            pickupArtifact1Path,
+            driveToGoal1Path,
             1400.0,
             shooter,
             intake,
@@ -121,7 +121,7 @@ class BlueGoalAuto : LinearOpMode() {
 
             when (opModeState) {
                 0 -> {
-                    follower.followPath(driveToGoalStartPath)
+                    follower.followPath(driveToGoal0Path)
                     shooter.enabled = true
                     opModeState++
                 }

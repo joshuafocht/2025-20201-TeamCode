@@ -16,29 +16,30 @@ import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import kotlin.math.abs
 
 class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: Gamepad, gamepad2: Gamepad, val tagId: Int, val tagOffset: () -> Double) {
-        val telemetryM = PanelsTelemetry.telemetry
-        val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
+    val telemetryM = PanelsTelemetry.telemetry
+    val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
 
-        val leftRGB = hardwareMap.servo.get("leftRGB")
-        val rightRGB = hardwareMap.servo.get("rightRGB")
+    val leftRGB = hardwareMap.servo.get("leftRGB")
+    val rightRGB = hardwareMap.servo.get("rightRGB")
 
-        var leftColor = RGB.OFF
-        var rightColor = RGB.OFF
+    var leftColor = RGB.OFF
+    var rightColor = RGB.OFF
 
-        val follower = Constants.createFollower(hardwareMap)
-        var moveMult = 1.0
-        var turnMult = 1.0
+    val follower = Constants.createFollower(hardwareMap)
+    var moveMult = 1.0
+    var turnMult = 1.0
 
-        val shooterMotor = MotorEx(hardwareMap, "shooterMotor")
-        val transferMotor = MotorEx(hardwareMap, "transferMotor")
-        val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
+    val shooterMotor = MotorEx(hardwareMap, "shooterMotor")
+    val transferMotor = MotorEx(hardwareMap, "transferMotor")
+    val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
 
-        val shooter = Shooter(shooterMotor)
-        val align = Align(hardwareMap, tagId)
-        val intake = Intake(intakeMotor, transferMotor, shooter)
+    val shooter = Shooter(shooterMotor)
+    val align = Align(hardwareMap, follower, tagId, true)
+    val intake = Intake(intakeMotor, transferMotor, shooter)
 
-        val driverOp = GamepadEx(gamepad1)
-        val shooterOp = GamepadEx(gamepad2)
+    val driverOp = GamepadEx(gamepad1)
+    val shooterOp = GamepadEx(gamepad2)
+    var auto = false
 
     init {
         follower.setStartingPose(Pose(72.000, 72.000, 90.000))
@@ -70,7 +71,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
         align.offset = tagOffset()
 
-        follower.setTeleOpDrive(
+        if (!auto) follower.setTeleOpDrive(
             driverOp.leftY * moveMult,
             -driverOp.leftX * moveMult,
             (-driverOp.rightX * turnMult) + align.power
@@ -87,28 +88,28 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
         intake.enabled = driverOp.isDown(GamepadKeys.Button.LEFT_BUMPER)
 
-        if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
-            align.enabled = true
-        else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-            if (align.aligned) {
-                shooter.tps = align.tps
-                shooter.enabled = true
-            } else {
-                shooter.enabled = false
-            }
-            if (shooter.spunUp) {
-                intakeMotor.set(Subsystems.Shooter.intakeSpeed)
-                transferMotor.set(Subsystems.Shooter.transferSpeed)
-            } else {
-                intakeMotor.set(0.0)
-                transferMotor.set(0.0)
-            }
-        } else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-            align.enabled = false
-            shooter.enabled = false
-            intakeMotor.set(0.0)
-            transferMotor.set(0.0)
-        }
+//        if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+//            align.enabled = true
+//        } else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+//            if (align.aligned) {
+//                shooter.tps = align.tps
+//                shooter.enabled = true
+//            } else {
+//                shooter.enabled = false
+//            }
+//            if (shooter.spunUp) {
+//                intakeMotor.set(Subsystems.Shooter.intakeSpeed)
+//                transferMotor.set(Subsystems.Shooter.transferSpeed)
+//            } else {
+//                intakeMotor.set(0.0)
+//                transferMotor.set(0.0)
+//            }
+//        } else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
+//            align.enabled = false
+//            shooter.enabled = false
+//            intakeMotor.set(0.0)
+//            transferMotor.set(0.0)
+//        }
 
         if (align.tags > 0 && align.aligned)
             leftColor = RGB.GREEN

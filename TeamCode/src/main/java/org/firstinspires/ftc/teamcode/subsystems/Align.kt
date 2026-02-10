@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems
 
+import com.pedropathing.follower.Follower
+import com.pedropathing.paths.PathChain
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot.UsbFacingDirection
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.IMU
+import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.controller.PIDFController
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
@@ -11,7 +14,7 @@ import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 import kotlin.math.abs
 
-class Align(val hardwareMap: HardwareMap, val id: Int) {
+class Align(val hardwareMap: HardwareMap, val follower: Follower, val id: Int, val teleOp: Boolean) {
     var aprilTag: AprilTagProcessor
     var visionPortal: VisionPortal
 
@@ -30,6 +33,9 @@ class Align(val hardwareMap: HardwareMap, val id: Int) {
     var offset: Double = 0.0
     var power: Double = 0.0
     var enabled: Boolean = false
+    var path: PathChain = follower.pathBuilder().build()
+    var state: Int = 0
+    var timer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
     val tps
         get() = Subsystems.Align.m * dist + Subsystems.Align.b
@@ -59,20 +65,43 @@ class Align(val hardwareMap: HardwareMap, val id: Int) {
             Subsystems.Align.Kd,
             Subsystems.Align.Kf
         )
-        if (enabled) {
-            for (i in aprilTag.detections?.indices!!) {
-                val tag = aprilTag.detections[i]
-                tags = 0
-                if (tag.id == id) {
-                    targetHeading = currentHeading - tag.ftcPose.bearing + offset // add if camera upright subtract if upside down
-                    dist = tag.ftcPose.range
-                    tags++
-                    break
+        for (i in aprilTag.detections?.indices!!) {
+            val tag = aprilTag.detections[i]
+            tags = 0
+            if (tag.id == id) {
+                targetHeading = currentHeading - tag.ftcPose.bearing + offset // add if camera upright subtract if upside down
+                dist = tag.ftcPose.range
+                tags++
+                break
+            }
+        }
+        power = if (enabled) pidf.calculate(currentHeading, targetHeading) else 0.0
+        path = follower.pathBuilder().setConstantHeadingInterpolation(targetHeading).build()
+        if (!enabled) state = 0
+        if (!enabled && teleOp) follower.startTeleOpDrive()
+
+        when (state) {
+            0 -> {
+                if (enabled) state++
+            }
+            1 -> {
+                if (tags <= 0) follower.followPath(path)
+                state++
+            }
+            2 -> {
+                if (!follower.followingPathChain) state++; timer.reset()
+            }
+            3 -> {
+                if (timer.time() > Subsystems.Align.pauseTime && tags > 0) {
+                    follower.followPath(path)
+                    state++
                 }
             }
-            power = pidf.calculate(currentHeading, targetHeading)
-        } else {
-            power = 0.0
+            4 -> {
+                if (!follower.followingPathChain) state++
+            }
+            5 -> {
+            }
         }
     }
 }

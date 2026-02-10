@@ -111,6 +111,9 @@ object Subsystems {
 
         @JvmField
         var tolerance: Double = 2.0
+
+        @JvmField
+        var pauseTime: Double = 500.0
     }
 
     @Configurable

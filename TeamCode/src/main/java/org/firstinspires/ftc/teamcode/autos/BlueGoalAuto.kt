@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autos
 
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
+import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
@@ -102,8 +103,9 @@ class BlueGoalAuto : LinearOpMode() {
         val driveToGoal2Path = follower
             .pathBuilder()
             .addPath(
-                BezierLine(
+                BezierCurve(
                     Pose(10.000, 60.000),
+                    Pose(48.000, 60.000),
                     Pose(48.000, 96.000)
                 )
             )

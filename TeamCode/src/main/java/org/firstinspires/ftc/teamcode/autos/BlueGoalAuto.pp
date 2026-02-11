@@ -48,7 +48,7 @@
       "id": "mlh6e6ox-lu5dm7",
       "name": "pickupArtifact1Path",
       "endPoint": {
-        "x": 16,
+        "x": 14,
         "y": 84,
         "heading": "constant",
         "reverse": false,
@@ -101,7 +101,7 @@
       "id": "mlh6hos1-5x678j",
       "name": "pickupArtifact2Path",
       "endPoint": {
-        "x": 10,
+        "x": 6,
         "y": 60,
         "heading": "constant",
         "reverse": false,

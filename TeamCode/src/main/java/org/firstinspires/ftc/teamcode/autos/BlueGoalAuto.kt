@@ -62,7 +62,7 @@ class BlueGoalAuto : LinearOpMode() {
             .addPath(
             BezierLine(
                 Pose(48.000, 84.000),
-                Pose(16.000, 84.000)
+                Pose(14.000, 84.000)
                 )
             )
             .setConstantHeadingInterpolation(Math.toRadians(180.0))
@@ -72,7 +72,7 @@ class BlueGoalAuto : LinearOpMode() {
             .pathBuilder()
             .addPath(
             BezierLine(
-                Pose(16.000, 84.000),
+                Pose(14.000, 84.000),
                 Pose(48.000, 96.000)
                 )
             )
@@ -94,7 +94,7 @@ class BlueGoalAuto : LinearOpMode() {
             BezierLine(
                 Pose(48.000, 60.000),
 
-                Pose(10.000, 60.000)
+                Pose(6.000, 60.000)
                 )
             )
             .setConstantHeadingInterpolation(Math.toRadians(180.0))
@@ -104,7 +104,7 @@ class BlueGoalAuto : LinearOpMode() {
             .pathBuilder()
             .addPath(
                 BezierCurve(
-                    Pose(10.000, 60.000),
+                    Pose(6.000, 60.000),
                     Pose(48.000, 60.000),
                     Pose(48.000, 96.000)
                 )

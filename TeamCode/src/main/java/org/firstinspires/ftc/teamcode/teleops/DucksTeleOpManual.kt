@@ -39,7 +39,7 @@ class DucksTeleOpManual : LinearOpMode() {
 
         val shooter = Shooter(shooterMotor)
 
-        val align = Align(hardwareMap, 20)
+        val align = Align(hardwareMap, follower, shooter, intakeMotor, transferMotor, 20, true)
 
         transferMotor.inverted = true
 

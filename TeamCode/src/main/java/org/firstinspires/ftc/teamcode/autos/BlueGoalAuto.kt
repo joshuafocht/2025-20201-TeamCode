@@ -61,7 +61,7 @@ class BlueGoalAuto : LinearOpMode() {
             .addPath(
             BezierLine(
                 Pose(48.000, 84.000),
-                Pose(20.000, 84.000)
+                Pose(16.000, 84.000)
                 )
             )
             .setConstantHeadingInterpolation(Math.toRadians(180.0))
@@ -71,7 +71,7 @@ class BlueGoalAuto : LinearOpMode() {
             .pathBuilder()
             .addPath(
             BezierLine(
-                Pose(20.000, 84.000),
+                Pose(16.000, 84.000),
                 Pose(48.000, 96.000)
                 )
             )
@@ -93,17 +93,50 @@ class BlueGoalAuto : LinearOpMode() {
             BezierLine(
                 Pose(48.000, 60.000),
 
-                Pose(16.000, 60.000)
+                Pose(10.000, 60.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(180.0))
+            .setConstantHeadingInterpolation(Math.toRadians(180.0))
             .build()
 
-        val cycle = ArtifactCycle(
+        val driveToGoal2Path = follower
+            .pathBuilder()
+            .addPath(
+                BezierLine(
+                    Pose(10.000, 60.000),
+                    Pose(48.000, 96.000)
+                )
+            )
+            .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(135.0))
+            .build()
+
+        val leavePath = follower
+            .pathBuilder()
+            .addPath(
+                BezierLine(
+                    Pose(48.000, 96.000),
+                    Pose(24.000, 70.000)
+                )
+            )
+            .setLinearHeadingInterpolation(Math.toRadians(135.0), Math.toRadians(0.0))
+            .build()
+
+        val cycle1 = ArtifactCycle(
             follower,
             driveToArtifact1Path,
             pickupArtifact1Path,
             driveToGoal1Path,
+            1400.0,
+            shooter,
+            intake,
+            telemetryJ
+        )
+
+        val cycle2 = ArtifactCycle(
+            follower,
+            driveToArtifact2Path,
+            pickupArtifact2Path,
+            driveToGoal2Path,
             1400.0,
             shooter,
             intake,
@@ -117,7 +150,8 @@ class BlueGoalAuto : LinearOpMode() {
             follower.update()
             shooter.update()
             intake.update()
-            cycle.update()
+            cycle1.update()
+            cycle2.update()
 
             when (opModeState) {
                 0 -> {
@@ -143,17 +177,27 @@ class BlueGoalAuto : LinearOpMode() {
                     }
                 }
                 4 -> {
-                    cycle.enabled = true
-                    if (cycle.finished) opModeState++
-                }
-                5 -> {
-                    follower.followPath(driveToArtifact2Path)
+                    cycle1.enabled = true
                     opModeState++
                 }
+                5 -> {
+                    if (cycle1.finished) opModeState++
+                }
                 6 -> {
+                    cycle2.enabled = true
+                    opModeState++
+                }
+                7 -> {
+                    if (cycle2.finished) opModeState++
+                }
+                8 -> {
+                    follower.followPath(leavePath)
+                    opModeState++
+                }
+                9 -> {
                     if (!follower.followingPathChain) opModeState++
                 }
-                else -> {break}
+                else -> { break }
             }
         }
     }

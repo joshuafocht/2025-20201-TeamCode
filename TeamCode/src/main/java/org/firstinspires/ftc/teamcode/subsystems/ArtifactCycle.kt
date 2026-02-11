@@ -23,6 +23,7 @@ class ArtifactCycle(
 
     fun update() {
         telemetryJ.addData("state", state)
+        telemetryJ.addData("finished", finished)
         telemetryJ.addData("time", timer.time())
         when (state) {
             0 -> {
@@ -49,15 +50,16 @@ class ArtifactCycle(
                 state++
             }
             6 -> { // Wait for path to finish
-                if (!follower.followingPathChain) {
-                    intake.enabled = false
-                    state++
-                }
+                if (!follower.followingPathChain) state++
             }
             7 -> { // Enable shooter and wait for spinup
                 shooter.tps = tps
                 shooter.enabled = true
-                if (shooter.spunUp) state++; timer.reset()
+                if (shooter.spunUp) {
+                    state++
+                    timer.reset()
+                    intake.enabled = false
+                }
             }
             8 -> { // Start shooting for a time
                 intake.intakeMotor.set(Subsystems.Shooter.intakeSpeed)
@@ -68,12 +70,11 @@ class ArtifactCycle(
                 shooter.enabled = false
                 intake.intakeMotor.set(0.0)
                 intake.transferMotor.set(0.0)
-            }
-            10 -> { // Show that we are done
                 telemetryJ.clearAll()
                 telemetryJ.addLine("Done!")
                 finished = true
-                state++
+                enabled = false
+                state = 0
             }
         }
     }

@@ -39,7 +39,7 @@ class ArtifactCycle(
             }
             3 -> { // Enable intake and start pickupArtifactPath
                 intake.enabled = true
-                follower.followPath(pickupArtifactPath)
+                follower.followPath(pickupArtifactPath, 0.5, true)
                 state++
             }
             4 -> { // Wait for path to finish
@@ -47,10 +47,11 @@ class ArtifactCycle(
             }
             5 -> { // Drive to goal
                 follower.followPath(driveToGoalPath)
+                timer.reset()
                 state++
             }
             6 -> { // Wait for path to finish
-                if (!follower.followingPathChain) state++
+                if (!follower.followingPathChain && (intake.finished || timer.time() >= Subsystems.ArtifactCycle.intakeTimeout)) state++; intake.enabled = false
             }
             7 -> { // Enable shooter and wait for spinup
                 shooter.tps = tps
@@ -58,7 +59,6 @@ class ArtifactCycle(
                 if (shooter.spunUp) {
                     state++
                     timer.reset()
-                    intake.enabled = false
                 }
             }
             8 -> { // Start shooting for a time

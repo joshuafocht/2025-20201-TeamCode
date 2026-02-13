@@ -48,7 +48,7 @@
       "id": "mlh6e6ox-lu5dm7",
       "name": "pickupArtifact1Path",
       "endPoint": {
-        "x": 14,
+        "x": 16,
         "y": 84,
         "heading": "constant",
         "reverse": false,
@@ -101,7 +101,7 @@
       "id": "mlh6hos1-5x678j",
       "name": "pickupArtifact2Path",
       "endPoint": {
-        "x": 6,
+        "x": 10,
         "y": 60,
         "heading": "constant",
         "reverse": false,
@@ -139,17 +139,57 @@
     },
     {
       "id": "mlh6lrfb-413cc4",
-      "name": "leavePath",
+      "name": "driveToArtifact3Path",
       "endPoint": {
-        "x": 24,
-        "y": 70,
+        "x": 48,
+        "y": 36,
         "heading": "linear",
         "reverse": false,
         "startDeg": 135,
-        "endDeg": 0
+        "endDeg": 180
       },
       "controlPoints": [],
       "color": "#86BACA",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": ""
+    },
+    {
+      "id": "mlk4s74f-pebpu6",
+      "name": "pickupArtifact3Path",
+      "endPoint": {
+        "x": 10,
+        "y": 36,
+        "heading": "constant",
+        "reverse": false,
+        "degrees": 180
+      },
+      "controlPoints": [],
+      "color": "#65BCBA",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": ""
+    },
+    {
+      "id": "mlk4tm1g-72caul",
+      "name": "leavePath",
+      "endPoint": {
+        "x": 20,
+        "y": 72,
+        "heading": "linear",
+        "reverse": false,
+        "startDeg": 180,
+        "endDeg": 0
+      },
+      "controlPoints": [
+        {
+          "x": 48,
+          "y": 48
+        }
+      ],
+      "color": "#7ACB95",
       "waitBeforeMs": 0,
       "waitAfterMs": 0,
       "waitBeforeName": "",
@@ -246,8 +286,16 @@
     {
       "kind": "path",
       "lineId": "mlh6lrfb-413cc4"
+    },
+    {
+      "kind": "path",
+      "lineId": "mlk4s74f-pebpu6"
+    },
+    {
+      "kind": "path",
+      "lineId": "mlk4tm1g-72caul"
     }
   ],
   "version": "1.2.1",
-  "timestamp": "2026-02-10T22:40:47.516Z"
+  "timestamp": "2026-02-13T01:30:57.780Z"
 }

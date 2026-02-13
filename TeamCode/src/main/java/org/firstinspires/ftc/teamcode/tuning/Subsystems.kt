@@ -30,7 +30,7 @@ object Subsystems {
         var changeTPS: Double = 10.0
 
         @JvmField
-        var targetTPS: Double = 1150.0
+        var targetTPS: Double = 1400.0
 
         @JvmField
         var tolerance: Double = 100.0
@@ -87,6 +87,9 @@ object Subsystems {
 
         @JvmField
         var shooterTime: Int = 3000
+
+        @JvmField
+        var intakeTimeout: Int = 3000
     }
 
     @Configurable

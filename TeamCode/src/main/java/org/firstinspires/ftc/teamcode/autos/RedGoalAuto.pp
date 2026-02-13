@@ -48,7 +48,7 @@
       "id": "mlh6e6ox-lu5dm7",
       "name": "pickupArtifact1Path",
       "endPoint": {
-        "x": 126,
+        "x": 128,
         "y": 84,
         "heading": "constant",
         "reverse": false,
@@ -101,7 +101,7 @@
       "id": "mlh6hos1-5x678j",
       "name": "pickupArtifact2Path",
       "endPoint": {
-        "x": 128,
+        "x": 134,
         "y": 60,
         "heading": "constant",
         "reverse": false,
@@ -139,17 +139,57 @@
     },
     {
       "id": "mlh6lrfb-413cc4",
-      "name": "leavePath",
+      "name": "driveToArtifact3Path",
       "endPoint": {
-        "x": 120,
-        "y": 70,
+        "x": 96,
+        "y": 36,
         "heading": "linear",
         "reverse": false,
         "startDeg": 45,
-        "endDeg": 180
+        "endDeg": 0
       },
       "controlPoints": [],
       "color": "#86BACA",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": ""
+    },
+    {
+      "id": "mlk4s74f-pebpu6",
+      "name": "pickupArtifact3Path",
+      "endPoint": {
+        "x": 134,
+        "y": 36,
+        "heading": "constant",
+        "reverse": false,
+        "degrees": 0
+      },
+      "controlPoints": [],
+      "color": "#65BCBA",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": ""
+    },
+    {
+      "id": "mlk4tm1g-72caul",
+      "name": "leavePath",
+      "endPoint": {
+        "x": 124,
+        "y": 72,
+        "heading": "linear",
+        "reverse": false,
+        "startDeg": 0,
+        "endDeg": 180
+      },
+      "controlPoints": [
+        {
+          "x": 96,
+          "y": 48
+        }
+      ],
+      "color": "#7ACB95",
       "waitBeforeMs": 0,
       "waitAfterMs": 0,
       "waitBeforeName": "",
@@ -246,8 +286,16 @@
     {
       "kind": "path",
       "lineId": "mlh6lrfb-413cc4"
+    },
+    {
+      "kind": "path",
+      "lineId": "mlk4s74f-pebpu6"
+    },
+    {
+      "kind": "path",
+      "lineId": "mlk4tm1g-72caul"
     }
   ],
   "version": "1.2.1",
-  "timestamp": "2026-02-10T22:43:28.950Z"
+  "timestamp": "2026-02-13T01:49:28.559Z"
 }

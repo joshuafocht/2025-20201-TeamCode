@@ -17,10 +17,12 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
     var timer: ElapsedTime = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
     var state: IntakeStates = IntakeStates.IDLE
     var enabled: Boolean = false
+    var finished: Boolean = false
     
     fun update() {
         when (state) {
             IntakeStates.IDLE -> {
+                finished = false
                 if (enabled) {
                     state = IntakeStates.SPIN_UP
                     timer.reset()
@@ -60,6 +62,7 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
                 }
             }
             IntakeStates.FINISH -> {
+                finished = true
                 if (!enabled) state = IntakeStates.IDLE
             }
         }

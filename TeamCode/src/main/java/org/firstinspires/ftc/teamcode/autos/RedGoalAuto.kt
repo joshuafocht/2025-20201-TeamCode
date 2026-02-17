@@ -23,7 +23,7 @@ class RedGoalAuto : LinearOpMode() {
         val opModeTimer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
         val shooter = Shooter(MotorEx(hardwareMap, "shooterMotor"))
-        shooter.tps = Subsystems.Shooter.targetTPS
+        shooter.tps = Subsystems.RedGoalAuto.tps
 
         val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
         val transferMotor = MotorEx(hardwareMap, "transferMotor")
@@ -31,8 +31,6 @@ class RedGoalAuto : LinearOpMode() {
         val intake = Intake(intakeMotor, transferMotor, shooter)
 
         val follower = Constants.createFollower(hardwareMap)
-
-        // Starting pose from Java Paths
         follower.setStartingPose(Pose(112.0, 135.0, Math.toRadians(-90.0)))
 
         val driveToGoal0Path = follower
@@ -43,7 +41,7 @@ class RedGoalAuto : LinearOpMode() {
                     Pose(96.000, 96.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(-90.0), Math.toRadians(45.0))
+            .setLinearHeadingInterpolation(Math.toRadians(-90.0), Math.toRadians(Subsystems.RedGoalAuto.angle))
             .build();
 
         val driveToArtifact1Path = follower
@@ -54,7 +52,7 @@ class RedGoalAuto : LinearOpMode() {
                     Pose(96.000, 84.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(45.0), Math.toRadians(0.0))
+            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.RedGoalAuto.angle), Math.toRadians(0.0))
             .build();
 
         val pickupArtifact1Path = follower
@@ -76,7 +74,7 @@ class RedGoalAuto : LinearOpMode() {
                     Pose(96.000, 96.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(45.0))
+            .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(Subsystems.RedGoalAuto.angle))
             .build()
 
         val driveToArtifact2Path = follower
@@ -87,15 +85,15 @@ class RedGoalAuto : LinearOpMode() {
                     Pose(96.000, 60.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(45.0), Math.toRadians(0.0))
+            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.RedGoalAuto.angle), Math.toRadians(0.0))
             .build()
 
         val pickupArtifact2Path = follower.pathBuilder().addPath(
             BezierLine(
                 Pose(96.000, 60.000),
                 Pose(134.000, 60.000)
+                )
             )
-        )
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
 
@@ -108,7 +106,7 @@ class RedGoalAuto : LinearOpMode() {
                     Pose(96.000, 96.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(45.0))
+            .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(Subsystems.RedGoalAuto.angle))
             .build()
 
         val driveToArtifact3Path = follower
@@ -119,7 +117,7 @@ class RedGoalAuto : LinearOpMode() {
                     Pose(96.000, 36.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(45.0), Math.toRadians(0.0))
+            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.RedGoalAuto.angle), Math.toRadians(0.0))
             .build()
 
         val pickupArtifact3Path = follower
@@ -150,7 +148,7 @@ class RedGoalAuto : LinearOpMode() {
             driveToArtifact1Path,
             pickupArtifact1Path,
             driveToGoal1Path,
-            Subsystems.Shooter.targetTPS,
+            Subsystems.RedGoalAuto.tps,
             shooter,
             intake,
             telemetryJ
@@ -161,7 +159,7 @@ class RedGoalAuto : LinearOpMode() {
             driveToArtifact2Path,
             pickupArtifact2Path,
             driveToGoal2Path,
-            Subsystems.Shooter.targetTPS,
+            Subsystems.RedGoalAuto.tps,
             shooter,
             intake,
             telemetryJ

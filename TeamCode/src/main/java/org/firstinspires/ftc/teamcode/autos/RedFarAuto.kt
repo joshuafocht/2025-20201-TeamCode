@@ -17,14 +17,14 @@ import org.firstinspires.ftc.teamcode.tuning.Subsystems
 
 
 @Autonomous
-class BlueGoalAuto : LinearOpMode() {
+class RedFarAuto : LinearOpMode() {
     override fun runOpMode() {
         val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
         var opModeState = 0
         val opModeTimer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
         val shooter = Shooter(MotorEx(hardwareMap, "shooterMotor"))
-        shooter.tps = Subsystems.BlueGoalAuto.tps
+        shooter.tps = Subsystems.RedFarAuto.tps
 
         val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
         val transferMotor = MotorEx(hardwareMap, "transferMotor")
@@ -32,117 +32,116 @@ class BlueGoalAuto : LinearOpMode() {
         val intake = Intake(intakeMotor, transferMotor, shooter)
 
         val follower = Constants.createFollower(hardwareMap)
-        follower.setStartingPose(Pose(32.0, 134.5, Math.toRadians(270.0)))
+        follower.setStartingPose(Pose(88.000, 8.000, Math.toRadians(90.0)))
 
         val driveToGoal0Path = follower
             .pathBuilder()
             .addPath(
-            BezierLine(
-                Pose(32.000, 134.500),
-                Pose(48.000, 96.000)
+                BezierLine(
+                    Pose(88.000, 8.000),
+                    Pose(84.000, 16.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(270.0), Math.toRadians(Subsystems.BlueGoalAuto.angle))
+            .setLinearHeadingInterpolation(Math.toRadians(90.0), Math.toRadians(Subsystems.RedFarAuto.angle))
             .build();
 
         val driveToArtifact1Path = follower
             .pathBuilder()
             .addPath(
                 BezierLine(
-                    Pose(48.000, 96.000),
-                    Pose(48.000, 84.000)
+                    Pose(84.000, 16.000),
+                    Pose(96.000, 36.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.BlueGoalAuto.angle), Math.toRadians(180.0))
+            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.RedFarAuto.angle), Math.toRadians(0.0))
             .build();
 
         val pickupArtifact1Path = follower
             .pathBuilder()
             .addPath(
-            BezierLine(
-                Pose(48.000, 84.000),
-                Pose(14.000, 84.000)
+                BezierLine(
+                    Pose(96.000, 36.000),
+                    Pose(138.000, 36.000)
                 )
             )
-            .setConstantHeadingInterpolation(Math.toRadians(180.0))
+            .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build();
 
         val driveToGoal1Path = follower
             .pathBuilder()
             .addPath(
-            BezierLine(
-                Pose(14.000, 84.000),
-                Pose(48.000, 96.000)
+                BezierLine(
+                    Pose(138.000, 36.000),
+                    Pose(84.000, 16.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(Subsystems.BlueGoalAuto.angle))
+            .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(Subsystems.RedFarAuto.angle))
             .build()
 
         val driveToArtifact2Path = follower
             .pathBuilder()
             .addPath(
-            BezierLine(
-                Pose(48.000, 96.000),
-                Pose(48.000, 60.000)
+                BezierLine(
+                    Pose(84.000, 16.000),
+                    Pose(96.000, 60.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.BlueGoalAuto.angle), Math.toRadians(180.0))
+            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.RedFarAuto.angle), Math.toRadians(0.0))
             .build()
 
         val pickupArtifact2Path = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(48.000, 60.000),
+                Pose(96.000, 60.000),
 
-                Pose(6.000, 60.000)
-                )
+                Pose(138.000, 60.000)
             )
-            .setConstantHeadingInterpolation(Math.toRadians(180.0))
+        )
+            .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
 
         val driveToGoal2Path = follower
             .pathBuilder()
             .addPath(
-                BezierCurve(
-                    Pose(6.000, 60.000),
-                    Pose(48.000, 60.000),
-                    Pose(48.000, 96.000)
+                BezierLine(
+                    Pose(138.000, 60.000),
+                    Pose(84.000, 16.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(Subsystems.BlueGoalAuto.angle))
+            .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(Subsystems.RedFarAuto.angle))
             .build()
 
         val driveToArtifact3Path = follower
             .pathBuilder()
             .addPath(
                 BezierLine(
-                    Pose(48.000, 96.000),
-                    Pose(48.000, 36.000)
+                    Pose(84.000, 16.000),
+                    Pose(96.000, 84.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.BlueGoalAuto.angle), Math.toRadians(180.0))
+            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.RedFarAuto.angle), Math.toRadians(0.0))
             .build()
 
         val pickupArtifact3Path = follower
             .pathBuilder()
             .addPath(
                 BezierLine(
-                    Pose(48.000, 36.000),
-                    Pose(6.000, 36.000)
+                    Pose(96.000, 84.000),
+                    Pose(130.000, 84.000)
                 )
             )
-            .setConstantHeadingInterpolation(Math.toRadians(180.0))
+            .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
 
         val leavePath = follower
             .pathBuilder()
             .addPath(
                 BezierCurve(
-                    Pose(10.000, 36.000),
-                    Pose(48.000, 48.000),
-                    Pose(20.000, 72.000)
+                    Pose(130.000, 84.000),
+                    Pose(96.000, 96.000),
+                    Pose(124.000, 72.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(0.0))
+            .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(180.0))
             .build()
 
         val cycle1 = ArtifactCycle(
@@ -150,7 +149,7 @@ class BlueGoalAuto : LinearOpMode() {
             driveToArtifact1Path,
             pickupArtifact1Path,
             driveToGoal1Path,
-            Subsystems.BlueGoalAuto.tps,
+            Subsystems.RedFarAuto.angle,
             shooter,
             intake,
             telemetryJ
@@ -161,7 +160,7 @@ class BlueGoalAuto : LinearOpMode() {
             driveToArtifact2Path,
             pickupArtifact2Path,
             driveToGoal2Path,
-            Subsystems.BlueGoalAuto.tps,
+            Subsystems.RedFarAuto.tps,
             shooter,
             intake,
             telemetryJ

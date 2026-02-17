@@ -130,4 +130,40 @@ object Subsystems {
         @JvmField
         var tagOffset = 0.5
     }
+
+    @Configurable
+    object BlueGoalAuto {
+        @JvmField
+        var angle = 135.0
+
+        @JvmField
+        var tps = 1400.0
+    }
+
+    @Configurable
+    object RedGoalAuto {
+        @JvmField
+        var angle = 135.0
+
+        @JvmField
+        var tps = 1400.0
+    }
+
+    @Configurable
+    object BlueFarAuto {
+        @JvmField
+        var angle = 135.0
+
+        @JvmField
+        var tps = 1400.0
+    }
+
+    @Configurable
+    object RedFarAuto {
+        @JvmField
+        var angle = 135.0
+
+        @JvmField
+        var tps = 1400.0
+    }
 }

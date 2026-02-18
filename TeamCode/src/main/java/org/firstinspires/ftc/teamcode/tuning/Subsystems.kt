@@ -155,7 +155,7 @@ object Subsystems {
         var angle = 105.0
 
         @JvmField
-        var tps = 19000.0
+        var tps = 1900.0
     }
 
     @Configurable

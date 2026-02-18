@@ -59,17 +59,19 @@ class ArtifactCycle(
             7 -> { // Enable shooter and wait for spinup
                 shooter.tps = tps
                 shooter.enabled = true
+            }
+            8 -> {
                 if (shooter.spunUp) {
                     state++
                     timer.reset()
                 }
             }
-            8 -> { // Start shooting for a time
+            9 -> { // Start shooting for a time
                 intake.intakeMotor.set(Subsystems.Shooter.intakeSpeed)
                 intake.transferMotor.set(Subsystems.Shooter.transferSpeed)
                 if (timer.time() > Subsystems.Shooter.shootTime) state++
             }
-            9 -> { // Stop shooter intake and transfer
+            10 -> { // Stop shooter intake and transfer
                 shooter.enabled = false
                 intake.intakeMotor.set(0.0)
                 intake.transferMotor.set(0.0)

@@ -32,13 +32,13 @@ class BlueFarAuto : LinearOpMode() {
         val intake = Intake(intakeMotor, transferMotor, shooter)
 
         val follower = Constants.createFollower(hardwareMap)
-        follower.setStartingPose(Pose(56.000, 8.000, Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(56.000, 9.000, Math.toRadians(90.0)))
 
         val driveToGoal0Path = follower
             .pathBuilder()
             .addPath(
                 BezierLine(
-                    Pose(56.000, 8.000),
+                    Pose(56.000, 9.000),
                     Pose(60.000, 16.000)
                 )
             )

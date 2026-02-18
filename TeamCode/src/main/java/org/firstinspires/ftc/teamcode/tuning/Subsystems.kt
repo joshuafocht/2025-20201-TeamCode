@@ -89,7 +89,7 @@ object Subsystems {
         var shooterTime: Int = 3000
 
         @JvmField
-        var intakeTimeout: Int = 3000
+        var intakeTimeout: Int = 2500
     }
 
     @Configurable
@@ -152,18 +152,18 @@ object Subsystems {
     @Configurable
     object BlueFarAuto {
         @JvmField
-        var angle = 105.0
+        var angle = 100.0
 
         @JvmField
-        var tps = 1900.0
+        var tps = 1800.0
     }
 
     @Configurable
     object RedFarAuto {
         @JvmField
-        var angle = 75.0
+        var angle = 80.0
 
         @JvmField
-        var tps = 1900.0
+        var tps = 1800.0
     }
 }

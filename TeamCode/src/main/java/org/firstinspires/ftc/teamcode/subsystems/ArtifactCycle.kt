@@ -51,7 +51,10 @@ class ArtifactCycle(
                 state++
             }
             6 -> { // Wait for path to finish
-                if (!follower.followingPathChain && (intake.finished || timer.time() >= Subsystems.ArtifactCycle.intakeTimeout)) state++; intake.enabled = false
+                if (!follower.followingPathChain && (intake.finished || timer.time() >= Subsystems.ArtifactCycle.intakeTimeout)) {
+                    state++
+                    intake.enabled = false
+                }
             }
             7 -> { // Enable shooter and wait for spinup
                 shooter.tps = tps

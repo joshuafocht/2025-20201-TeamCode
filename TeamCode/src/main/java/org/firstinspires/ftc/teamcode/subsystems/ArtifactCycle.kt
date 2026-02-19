@@ -62,7 +62,7 @@ class ArtifactCycle(
                 state++
             }
             8 -> { // Wait for shooter to spin up
-                if (shooter.spunUp && intake.finished) {
+                if (shooter.spunUp) {
                     state++
                     timer.reset()
                 }

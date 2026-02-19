@@ -152,18 +152,18 @@ object Subsystems {
     @Configurable
     object BlueFarAuto {
         @JvmField
-        var angle = 100.0
+        var angle = 117.0
 
         @JvmField
-        var tps = 1800.0
+        var tps = 1750.0
     }
 
     @Configurable
     object RedFarAuto {
         @JvmField
-        var angle = 80.0
+        var angle = 63.0
 
         @JvmField
-        var tps = 1800.0
+        var tps = 1750.0
     }
 }

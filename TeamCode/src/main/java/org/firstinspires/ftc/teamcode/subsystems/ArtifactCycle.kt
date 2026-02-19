@@ -52,27 +52,24 @@ class ArtifactCycle(
             }
             6 -> { // Wait for path to finish
                 if (!follower.followingPathChain && (intake.finished || timer.time() >= Subsystems.ArtifactCycle.intakeTimeout)) {
-                    intake.enabled = false
                     state++
+                    intake.enabled = false
                 }
             }
             7 -> { // Enable shooter and wait for spinup
                 shooter.tps = tps
                 shooter.enabled = true
-                state++
-            }
-            8 -> { // Wait for shooter to spin up
                 if (shooter.spunUp) {
                     state++
                     timer.reset()
                 }
             }
-            9 -> { // Start shooting for a time
+            8 -> { // Start shooting for a time
                 intake.intakeMotor.set(Subsystems.Shooter.intakeSpeed)
                 intake.transferMotor.set(Subsystems.Shooter.transferSpeed)
                 if (timer.time() > Subsystems.Shooter.shootTime) state++
             }
-            10 -> { // Stop shooter intake and transfer
+            9 -> { // Stop shooter intake and transfer
                 shooter.enabled = false
                 intake.intakeMotor.set(0.0)
                 intake.transferMotor.set(0.0)

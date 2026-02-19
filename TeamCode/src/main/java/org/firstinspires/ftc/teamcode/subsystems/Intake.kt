@@ -46,7 +46,7 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
                 }
             }
             IntakeStates.SPIN_BACK -> {
-                if (!shooter.spunUp) {
+                if (!shooter.spunUp || !enabled) {
                     shooter.enabled = false
                     state = IntakeStates.BACK_OFF
                     timer.reset()

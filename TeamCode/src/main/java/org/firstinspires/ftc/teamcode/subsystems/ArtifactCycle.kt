@@ -59,8 +59,9 @@ class ArtifactCycle(
             7 -> { // Enable shooter and wait for spinup
                 shooter.tps = tps
                 shooter.enabled = true
+                state++
             }
-            8 -> {
+            8 -> { // Wait for shooter to spin up
                 if (shooter.spunUp) {
                     state++
                     timer.reset()

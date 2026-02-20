@@ -5,6 +5,7 @@ import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.Pose
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.IMU
 import com.seattlesolvers.solverslib.controller.PIDFController
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 
 @Autonomous
+@Disabled
 class AlignToBlue : LinearOpMode() {
     override fun runOpMode() {
         val telemetryM = PanelsTelemetry.telemetry

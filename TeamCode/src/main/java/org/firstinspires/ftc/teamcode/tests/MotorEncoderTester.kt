@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.tests
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 
 @TeleOp
+@Disabled
 class MotorEncoderTester : LinearOpMode() {
     override fun runOpMode() {
         val frontLeftMotor: MotorEx = MotorEx(hardwareMap, "frontLeftMotor")

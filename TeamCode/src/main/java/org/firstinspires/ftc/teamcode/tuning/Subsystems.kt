@@ -166,4 +166,13 @@ object Subsystems {
         @JvmField
         var tps = 1750.0
     }
+
+    @Configurable
+    object AutoDelay {
+        @JvmField
+        var safeDelay = 15000
+
+        @JvmField
+        var leaveDelay = 25000
+    }
 }

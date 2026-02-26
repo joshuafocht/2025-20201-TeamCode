@@ -9,6 +9,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys
 import com.seattlesolvers.solverslib.hardware.motors.Motor
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
+import com.seattlesolvers.solverslib.hardware.motors.MotorGroup
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.tuning.RGB
@@ -29,11 +30,13 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
     var moveMult = 1.0
     var turnMult = 1.0
 
-    val shooterMotor = MotorEx(hardwareMap, "shooterMotor")
-    val transferMotor = MotorEx(hardwareMap, "transferMotor")
+    val shooterLMotor = MotorEx(hardwareMap, "shooterLMotor")
+    val shooterRMotor = MotorEx(hardwareMap, "shooterRMotor")
     val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
+    val transferMotor = MotorEx(hardwareMap, "transferMotor")
+    val shooterMotor = MotorGroup(shooterRMotor, shooterLMotor)
 
-    val shooter = Shooter(shooterMotor)
+    val shooter = Shooter(shooterLMotor, shooterRMotor)
     val align = Align(hardwareMap, follower, shooter, intakeMotor, transferMotor,tagId, true)
     val intake = Intake(intakeMotor, transferMotor, shooter)
 
@@ -45,11 +48,14 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         follower.setStartingPose(Pose(72.000, 72.000, 90.000))
         follower.update()
 
-        shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
+        shooterLMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
+        shooterRMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         transferMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         intakeMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
 
         transferMotor.inverted = true
+        shooterLMotor.inverted = true
+        shooterRMotor.encoder = shooterLMotor.encoder
     }
 
     fun start() {
@@ -167,6 +173,8 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         telemetryJ.addData("shooter.realTPS", shooter.realTPS)
         telemetryJ.addData("shooter.realAccel", shooter.realAccel)
         telemetryJ.addData("shooter.realCurrent", shooter.realCurrent)
+        telemetryJ.addData("shooter.shooterLMotor.get", shooter.shooterLMotor.get())
+        telemetryJ.addData("shooter.shooterRMotor.get", shooter.shooterRMotor.get())
         telemetryJ.addData("align.targetHeading", align.targetHeading)
         telemetryJ.addData("align.currentHeading", align.currentHeading)
         telemetryJ.addData("align.aligned", align.aligned)

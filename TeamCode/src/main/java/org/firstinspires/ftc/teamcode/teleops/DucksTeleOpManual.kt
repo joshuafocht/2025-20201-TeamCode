@@ -29,15 +29,20 @@ class DucksTeleOpManual : LinearOpMode() {
         var moveMult = 1.0
         var turnMult = 1.0
 
-        val shooterMotor = MotorEx(hardwareMap, "shooterMotor")
+        val shooterLMotor = MotorEx(hardwareMap, "shooterLMotor")
+        val shooterRMotor = MotorEx(hardwareMap, "shooterRMotor")
         val transferMotor = MotorEx(hardwareMap, "transferMotor")
         val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
 
-        shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
+        shooterLMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
+        shooterRMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         transferMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         intakeMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
 
-        val shooter = Shooter(shooterMotor)
+        shooterLMotor.inverted = true
+        shooterRMotor.encoder = shooterLMotor.encoder
+
+        val shooter = Shooter(shooterLMotor, shooterRMotor)
 
         val align = Align(hardwareMap, follower, shooter, intakeMotor, transferMotor, 20, true)
 

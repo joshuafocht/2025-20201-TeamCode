@@ -40,7 +40,7 @@ class DucksTeleOpManual : LinearOpMode() {
         intakeMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
 
         shooterLMotor.inverted = true
-        shooterRMotor.encoder = shooterLMotor.encoder
+//        shooterRMotor.encoder = shooterLMotor.encoder
 
         val shooter = Shooter(shooterLMotor, shooterRMotor)
 

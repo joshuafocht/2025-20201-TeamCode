@@ -55,7 +55,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
         transferMotor.inverted = true
         shooterLMotor.inverted = true
-        shooterRMotor.encoder = shooterLMotor.encoder
+//        shooterRMotor.encoder = shooterLMotor.encoder
     }
 
     fun start() {

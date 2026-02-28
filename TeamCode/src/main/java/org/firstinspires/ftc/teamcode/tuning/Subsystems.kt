@@ -62,7 +62,7 @@ object Subsystems {
         var transferOutPower: Double = -1.0
 
         @JvmField
-        var transferBackOffTime: Int = 600
+        var transferBackOffTime: Int = 500
     }
 
     @Configurable
@@ -152,18 +152,27 @@ object Subsystems {
     @Configurable
     object BlueFarAuto {
         @JvmField
-        var angle = 115.0
+        var angle = 117.0
 
         @JvmField
-        var tps = 1725.0
+        var tps = 1750.0
     }
 
     @Configurable
     object RedFarAuto {
         @JvmField
-        var angle = 65.0
+        var angle = 63.0
 
         @JvmField
-        var tps = 1725.0
+        var tps = 1750.0
+    }
+
+    @Configurable
+    object AutoDelay {
+        @JvmField
+        var safeDelay = 15000
+
+        @JvmField
+        var leaveDelay = 25000
     }
 }

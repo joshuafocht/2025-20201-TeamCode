@@ -8,6 +8,7 @@ import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
+import com.seattlesolvers.solverslib.hardware.motors.Motor
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystems.Intake
@@ -22,7 +23,12 @@ class RedFarSafe : LinearOpMode() {
         var state = 0
         val timer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
-        val shooter = Shooter(MotorEx(hardwareMap, "shooterMotor"))
+        val shooterLMotor = MotorEx(hardwareMap, "shooterLMotor")
+        val shooterRMotor = MotorEx(hardwareMap, "shooterRMotor")
+        shooterLMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
+        shooterRMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
+        shooterLMotor.inverted = true
+        val shooter = Shooter(shooterLMotor, shooterRMotor)
         shooter.tps = Subsystems.BlueFarAuto.tps
 
         val intakeMotor = MotorEx(hardwareMap, "intakeMotor")

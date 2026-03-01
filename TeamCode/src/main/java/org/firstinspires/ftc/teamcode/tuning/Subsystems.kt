@@ -107,10 +107,10 @@ object Subsystems {
         var Kf: Double = 0.0
 
         @JvmField
-        var m: Double = 6.2
+        var m: Double = 6.5
 
         @JvmField
-        var b: Double = 1100.0
+        var b: Double = 700.0
 
         @JvmField
         var tolerance: Double = 2.0

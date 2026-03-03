@@ -39,7 +39,7 @@ class DucksTeleOpManual : LinearOpMode() {
 
         val shooter = Shooter(shooterMotor)
 
-        val align = Align(hardwareMap, follower, shooter, intakeMotor, transferMotor, 20, true)
+        val align = Align(hardwareMap, follower, 20, true)
 
         transferMotor.inverted = true
 
@@ -61,13 +61,10 @@ class DucksTeleOpManual : LinearOpMode() {
             follower.setTeleOpDrive(
                 driverOp.leftY * moveMult,
                 -driverOp.leftX * moveMult,
-                (-driverOp.rightX * turnMult) + align.power
+                (-driverOp.rightX * turnMult) // + align.power
             )
 
-            if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER))
-                align.enabled = true
-            else
-                align.enabled = true
+            align.enabled = driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)
 
             if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
                 moveMult += 0.05

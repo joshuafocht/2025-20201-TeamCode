@@ -34,12 +34,11 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
     val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
 
     val shooter = Shooter(shooterMotor)
-    val align = Align(hardwareMap, follower, shooter, intakeMotor, transferMotor,tagId, true)
+    val align = Align(hardwareMap, follower, tagId, true)
     val intake = Intake(intakeMotor, transferMotor, shooter)
 
     val driverOp = GamepadEx(gamepad1)
     val shooterOp = GamepadEx(gamepad2)
-    var auto = false
 
     init {
         follower.setStartingPose(Pose(72.000, 72.000, 90.000))
@@ -71,10 +70,10 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
         align.offset = tagOffset()
 
-        if (!auto) follower.setTeleOpDrive(
+        follower.setTeleOpDrive(
             driverOp.leftY * moveMult,
             -driverOp.leftX * moveMult,
-            (-driverOp.rightX * turnMult) + align.power
+            (-driverOp.rightX * turnMult) // + align.power
         )
 
         if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
@@ -87,8 +86,6 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
             turnMult -= 0.05
 
         intake.enabled = driverOp.isDown(GamepadKeys.Button.LEFT_BUMPER)
-//        align.enabled = driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)
-//        if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) follower.startTeleOpDrive()
 
         if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
             align.enabled = true

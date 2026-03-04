@@ -108,6 +108,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
             shooter.enabled = false
             intakeMotor.set(0.0)
             transferMotor.set(0.0)
+            follower.startTeleOpDrive()
         }
 
         if (align.tags > 0 && align.aligned)
@@ -164,6 +165,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         telemetryJ.addData("shooter.realTPS", shooter.realTPS)
         telemetryJ.addData("shooter.realAccel", shooter.realAccel)
         telemetryJ.addData("shooter.realCurrent", shooter.realCurrent)
+        telemetryJ.addData("align.enabled", align.enabled)
         telemetryJ.addData("align.targetHeading", align.targetHeading)
         telemetryJ.addData("align.currentHeading", align.currentHeading)
         telemetryJ.addData("align.aligned", align.aligned)

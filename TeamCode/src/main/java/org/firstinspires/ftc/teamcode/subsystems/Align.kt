@@ -31,7 +31,7 @@ class Align(val hardwareMap: HardwareMap, val follower: Follower, val id: Int, v
     var dist = 0.0
     var targetHeading = 0.0
     val currentHeading
-        get() = imu.robotYawPitchRollAngles.yaw
+        get() = Math.toDegrees(follower.heading)
     var tags = 0
     var offset: Double = 0.0
 
@@ -77,9 +77,8 @@ class Align(val hardwareMap: HardwareMap, val follower: Follower, val id: Int, v
         }
         power = if (enabled) pidf.calculate(currentHeading, targetHeading) else 0.0
 
-        if (enabled && usePedro && !follower.isBusy) {
+        if (enabled && usePedro && !follower.isBusy && !aligned) {
             follower.turnTo(Math.toRadians(targetHeading))
-            follower.followPath(Path())
         }
     }
 }

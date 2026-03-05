@@ -28,17 +28,7 @@ class Shooter(val shooterMotor: MotorEx) {
     }
 
     var tps: Double = Subsystems.Shooter.targetTPS
-//        set(value) {
-//            field = value
-//            shooterMotor.velocity = if (enabled) tps else 0.0
-//        }
-
     var enabled: Boolean = false
-//        set(value) {
-//            field = value
-//            shooterMotor.velocity = if (enabled) tps else 0.0
-//        }
-
 
     val spunUp: Boolean
         get() = abs(tps) - abs(shooterMotor.velocity) < Subsystems.Shooter.tolerance

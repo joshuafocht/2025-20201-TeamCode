@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.tuning.RGB
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 import kotlin.math.abs
 
-class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: Gamepad, gamepad2: Gamepad, val tagId: Int, val tagOffset: () -> Double) {
+class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: Gamepad, gamepad2: Gamepad, val tagId: Int, val tagOffset: () -> Double, var idle: Boolean) {
     val telemetryM = PanelsTelemetry.telemetry
     val telemetryJ = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
 
@@ -39,7 +39,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
     val shooter = Shooter(shooterMotor)
     val align = Align(hardwareMap, follower, shooter, intakeMotor, transferMotor,tagId, true)
-    val intake = Intake(intakeMotor, transferMotor, shooter, antiJamServo, true)
+    val intake = Intake(intakeMotor, transferMotor, shooter, antiJamServo, idle)
 
     val driverOp = GamepadEx(gamepad1)
     var auto = false
@@ -95,7 +95,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
         intake.enabled = driverOp.isDown(GamepadKeys.Button.LEFT_BUMPER)
 
-        if (intake.finished) shooter.tps = Subsystems.Shooter.preSpeed
+        if (intake.finished && idle) shooter.tps = Subsystems.Shooter.preSpeed
 
         if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
             intake.finished = false
@@ -113,7 +113,8 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
             }
         } else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
             align.enabled = false
-            shooter.tps = Subsystems.Shooter.idleSpeed
+            if (idle) shooter.tps = Subsystems.Shooter.idleSpeed
+            else shooter.enabled = false
             antiJamServo.set(Subsystems.AntiJam.blockPos)
             intakeMotor.set(0.0)
             transferMotor.set(0.0)

@@ -4,6 +4,7 @@ import com.bylazar.telemetry.JoinedTelemetry
 import com.pedropathing.follower.Follower
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.util.ElapsedTime
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 
 class ArtifactCycle(
@@ -14,7 +15,9 @@ class ArtifactCycle(
         val tps: Double,
         val shooter: Shooter,
         val intake: Intake,
-        val telemetryJ: JoinedTelemetry
+        val antiJamServo: ServoEx,
+        val telemetryJ: JoinedTelemetry,
+        val idle: Boolean
     ) {
     var timer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
     var state = 0
@@ -51,15 +54,20 @@ class ArtifactCycle(
                 state++
             }
             6 -> { // Wait for path to finish
+                if (intake.finished && idle) {
+                    shooter.tps = Subsystems.Shooter.preSpeed
+                }
                 if (!follower.followingPathChain && (intake.finished || timer.time() >= Subsystems.ArtifactCycle.intakeTimeout)) {
                     state++
+                    timer.reset()
                     intake.enabled = false
                 }
             }
             7 -> { // Enable shooter and wait for spinup
                 shooter.tps = tps
-                shooter.enabled = true
-                if (shooter.spunUp) {
+                antiJamServo.set(Subsystems.AntiJam.shootPos)
+                if (!idle) shooter.enabled = true
+                if (shooter.spunUp && (!idle || timer.time() > Subsystems.AntiJam.moveTime)) {
                     state++
                     timer.reset()
                 }
@@ -70,8 +78,9 @@ class ArtifactCycle(
                 if (timer.time() > Subsystems.Shooter.shootTime) state++
             }
             9 -> { // Stop shooter intake and transfer
-//                shooter.enabled = false
-                shooter.tps = Subsystems.Shooter.idleSpeed
+                if (!idle) shooter.enabled = false
+                else shooter.tps = Subsystems.Shooter.idleSpeed
+                antiJamServo.set(Subsystems.AntiJam.blockPos)
                 intake.intakeMotor.set(0.0)
                 intake.transferMotor.set(0.0)
                 telemetryJ.clearAll()

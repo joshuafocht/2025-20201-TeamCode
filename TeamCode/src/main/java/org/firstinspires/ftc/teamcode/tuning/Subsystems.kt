@@ -132,13 +132,13 @@ object Subsystems {
     @Configurable
     object BlueTeleOp {
         @JvmField
-        var tagOffset = -0.5
+        var tagOffset = 2.0
     }
 
     @Configurable
     object RedTeleOp {
         @JvmField
-        var tagOffset = 0.5
+        var tagOffset = -2.0
     }
 
     @Configurable
@@ -198,6 +198,6 @@ object Subsystems {
         var intakePos = 0.3
 
         @JvmField
-        var moveTime = 500.0
+        var moveTime = 1000.0
     }
 }

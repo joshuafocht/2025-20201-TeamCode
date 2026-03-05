@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems
 
+import android.net.wifi.aware.ParcelablePeerHandle
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.Pose
@@ -42,6 +43,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
     val driverOp = GamepadEx(gamepad1)
     var auto = false
+    var timer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
     init {
         follower.setStartingPose(Pose(72.000, 72.000, 90.000))
@@ -98,10 +100,11 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
             intake.finished = false
             align.enabled = true
+            timer.reset()
         } else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
             antiJamServo.set(Subsystems.AntiJam.shootPos)
             shooter.tps = align.tps
-            if (shooter.spunUp && align.aligned) {
+            if (shooter.spunUp && align.aligned && (timer.time() > Subsystems.AntiJam.moveTime)) {
                 intakeMotor.set(Subsystems.Shooter.intakeSpeed)
                 transferMotor.set(Subsystems.Shooter.transferSpeed)
             } else {

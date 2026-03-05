@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystems.ArtifactCycle
 import org.firstinspires.ftc.teamcode.subsystems.Intake
@@ -28,8 +29,9 @@ class RedFarAuto : LinearOpMode() {
 
         val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
         val transferMotor = MotorEx(hardwareMap, "transferMotor")
+        val antiJamServo = ServoEx(hardwareMap, "antiJamServo")
         transferMotor.inverted = true
-        val intake = Intake(intakeMotor, transferMotor, shooter)
+        val intake = Intake(intakeMotor, transferMotor, shooter, antiJamServo, true)
 
         val follower = Constants.createFollower(hardwareMap)
         follower.setStartingPose(Pose(88.000, 9.000, Math.toRadians(90.0)))
@@ -152,7 +154,9 @@ class RedFarAuto : LinearOpMode() {
             Subsystems.RedFarAuto.angle,
             shooter,
             intake,
-            telemetryJ
+            antiJamServo,
+            telemetryJ,
+            true
         )
 
         val cycle2 = ArtifactCycle(
@@ -163,7 +167,9 @@ class RedFarAuto : LinearOpMode() {
             Subsystems.RedFarAuto.tps,
             shooter,
             intake,
-            telemetryJ
+            antiJamServo,
+            telemetryJ,
+            true
         )
 
         waitForStart()
@@ -196,7 +202,7 @@ class RedFarAuto : LinearOpMode() {
                 }
                 3 -> {
                     if (opModeTimer.time() > Subsystems.Shooter.shootTime) {
-                        shooter.enabled = false
+                        shooter.tps = Subsystems.Shooter.idleSpeed
                         intakeMotor.set(0.0)
                         transferMotor.set(0.0)
                         opModeState++

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystems.Intake
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
@@ -26,8 +27,9 @@ class BlueGoalSafe : LinearOpMode() {
 
         val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
         val transferMotor = MotorEx(hardwareMap, "transferMotor")
+        val antiJamServo = ServoEx(hardwareMap, "antiJamServo")
         transferMotor.inverted = true
-        val intake = Intake(intakeMotor, transferMotor, shooter)
+        val intake = Intake(intakeMotor, transferMotor, shooter, antiJamServo, true)
 
         val follower = Constants.createFollower(hardwareMap)
         follower.setStartingPose(Pose(32.0, 134.5, Math.toRadians(270.0)))
@@ -104,7 +106,7 @@ class BlueGoalSafe : LinearOpMode() {
                 }
                 4 -> {
                     if (timer.time() > Subsystems.Shooter.shootTime) {
-                        shooter.enabled = false
+                        shooter.tps = Subsystems.Shooter.idleSpeed
                         intakeMotor.set(0.0)
                         transferMotor.set(0.0)
                         state++

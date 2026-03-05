@@ -22,7 +22,7 @@ class ArtifactCycle(
     var finished = false
 
     fun update() {
-        telemetryJ.addData("state", state)
+        telemetryJ.addData("intakeState", state)
         telemetryJ.addData("finished", finished)
         telemetryJ.addData("time", timer.time())
         when (state) {
@@ -70,7 +70,8 @@ class ArtifactCycle(
                 if (timer.time() > Subsystems.Shooter.shootTime) state++
             }
             9 -> { // Stop shooter intake and transfer
-                shooter.enabled = false
+//                shooter.enabled = false
+                shooter.tps = Subsystems.Shooter.idleSpeed
                 intake.intakeMotor.set(0.0)
                 intake.transferMotor.set(0.0)
                 telemetryJ.clearAll()

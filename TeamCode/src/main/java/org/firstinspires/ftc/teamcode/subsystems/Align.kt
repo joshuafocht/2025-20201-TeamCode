@@ -36,7 +36,7 @@ class Align(val hardwareMap: HardwareMap, val follower: Follower, val shooter: S
     var power: Double = 0.0
     var enabled: Boolean = false
 //    var path: PathChain = follower.pathBuilder().build()
-//    var state: Int = 0
+//    var intakeState: Int = 0
 //    var timer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
     val tps
@@ -80,32 +80,32 @@ class Align(val hardwareMap: HardwareMap, val follower: Follower, val shooter: S
         power = if (enabled) pidf.calculate(currentHeading, targetHeading) else 0.0
 //        path = follower.pathBuilder().addPath(BezierPoint(follower.pose)).setConstantHeadingInterpolation(targetHeading).build()
 //        if (!enabled) {
-//            state = 0
+//            intakeState = 0
 //            shooter.enabled = false
 //            intakeMotor.set(0.0)
 //            transferMotor.set(0.0)
 //        }
 ////        if (!enabled && teleOp) follower.startTeleOpDrive()
 //
-//        when (state) {
+//        when (intakeState) {
 //            0 -> {
-//                if (enabled) state++
+//                if (enabled) intakeState++
 //            }
 //            1 -> {
 //                if (tags <= 0) follower.followPath(path)
-//                state++
+//                intakeState++
 //            }
 //            2 -> {
-//                if (!follower.followingPathChain) state++; timer.reset()
+//                if (!follower.followingPathChain) intakeState++; timer.reset()
 //            }
 //            3 -> {
 //                if (timer.time() >= Subsystems.Align.pauseTime && tags > 0) {
 //                    follower.followPath(path)
-//                    state++
+//                    intakeState++
 //                }
 //            }
 //            4 -> {
-//                if (!follower.followingPathChain) state++
+//                if (!follower.followingPathChain) intakeState++
 //            }
 //            5 -> {
 //                shooter.tps = tps

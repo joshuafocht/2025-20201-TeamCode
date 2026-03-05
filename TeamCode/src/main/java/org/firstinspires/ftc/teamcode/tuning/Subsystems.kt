@@ -40,12 +40,22 @@ object Subsystems {
 
         @JvmField
         var intakeSpeed: Double = 1.0
+
+        @JvmField
+        var idleSpeed: Double = 300.0
+
+        @JvmField
+        var preSpeed: Double = 1200.0
+
+        @JvmField
+        var clearSpeed: Double = 100.0
     }
 
     @Configurable
     object Intake {
         @JvmField
         var spinUpTimeOut: Double = 2000.0
+
         @JvmField
         var shooterBackTPS: Double = -500.0
 
@@ -62,7 +72,7 @@ object Subsystems {
         var transferOutPower: Double = -1.0
 
         @JvmField
-        var transferBackOffTime: Int = 600
+        var transferBackOffTime: Int = 500
     }
 
     @Configurable
@@ -107,10 +117,10 @@ object Subsystems {
         var Kf: Double = 0.0
 
         @JvmField
-        var m: Double = 6.2
+        var m: Double = 6.5
 
         @JvmField
-        var b: Double = 1100.0
+        var b: Double = 800.0
 
         @JvmField
         var tolerance: Double = 2.0
@@ -174,5 +184,20 @@ object Subsystems {
 
         @JvmField
         var leaveDelay = 25000
+    }
+
+    @Configurable
+    object AntiJam {
+        @JvmField
+        var blockPos = 0.0
+
+        @JvmField
+        var shootPos = 1.0
+
+        @JvmField
+        var intakePos = 0.3
+
+        @JvmField
+        var moveTime = 500.0
     }
 }

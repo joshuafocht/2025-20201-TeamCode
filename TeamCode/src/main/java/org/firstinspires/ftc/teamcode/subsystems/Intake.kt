@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode.subsystems
 
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
 
 class
-Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shooter) {
+Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shooter, val antiJamServo: ServoEx, var idle: Boolean) {
     enum class IntakeStates {
         IDLE,
         SPIN_UP,
@@ -32,7 +33,9 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
                 intakeMotor.set(Subsystems.Intake.intakeInPower)
                 transferMotor.set(Subsystems.Intake.transferInPower)
 
-                shooter.tps = Subsystems.Intake.shooterBackTPS
+                antiJamServo.set(Subsystems.AntiJam.intakePos)
+
+                shooter.tps = if (!idle) Subsystems.Intake.shooterBackTPS else Subsystems.Shooter.idleSpeed
                 shooter.enabled = true
 
                 if (shooter.spunUp) {
@@ -47,7 +50,8 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
             }
             IntakeStates.SPIN_BACK -> {
                 if (!shooter.spunUp) {
-                    shooter.enabled = false
+                    if (!idle) shooter.enabled = false
+                    else shooter.tps = Subsystems.Shooter.idleSpeed
                     state = IntakeStates.BACK_OFF
                     timer.reset()
                 }
@@ -55,6 +59,7 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
             IntakeStates.BACK_OFF -> {
                 intakeMotor.set(Subsystems.Intake.intakeOutPower)
                 transferMotor.set(Subsystems.Intake.transferOutPower)
+                antiJamServo.set(Subsystems.AntiJam.blockPos)
                 if (timer.time() >= Subsystems.Intake.transferBackOffTime) {
                     state = IntakeStates.FINISH
                     intakeMotor.set(0.0)

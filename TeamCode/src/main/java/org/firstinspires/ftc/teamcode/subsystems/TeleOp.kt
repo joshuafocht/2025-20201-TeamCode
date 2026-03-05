@@ -5,10 +5,12 @@ import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.gamepad.GamepadEx
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys
 import com.seattlesolvers.solverslib.hardware.motors.Motor
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.tuning.RGB
@@ -32,13 +34,13 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
     val shooterMotor = MotorEx(hardwareMap, "shooterMotor")
     val transferMotor = MotorEx(hardwareMap, "transferMotor")
     val intakeMotor = MotorEx(hardwareMap, "intakeMotor")
+    val antiJamServo = ServoEx(hardwareMap, "antiJamServo")
 
     val shooter = Shooter(shooterMotor)
     val align = Align(hardwareMap, follower, shooter, intakeMotor, transferMotor,tagId, true)
-    val intake = Intake(intakeMotor, transferMotor, shooter)
+    val intake = Intake(intakeMotor, transferMotor, shooter, antiJamServo, true)
 
     val driverOp = GamepadEx(gamepad1)
-    val shooterOp = GamepadEx(gamepad2)
     var auto = false
 
     init {
@@ -48,6 +50,8 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         transferMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         intakeMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
+
+        shooter.tps = Subsystems.Shooter.idleSpeed
 
         transferMotor.inverted = true
     }
@@ -63,13 +67,14 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         follower.update()
 
         driverOp.readButtons()
-        shooterOp.readButtons()
 
         shooter.update()
         intake.update()
         align.update()
 
         align.offset = tagOffset()
+
+        shooter.enabled = true
 
         if (!auto) follower.setTeleOpDrive(
             driverOp.leftY * moveMult,
@@ -87,19 +92,16 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
             turnMult -= 0.05
 
         intake.enabled = driverOp.isDown(GamepadKeys.Button.LEFT_BUMPER)
-//        align.enabled = driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)
-//        if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) follower.startTeleOpDrive()
+
+        if (intake.finished) shooter.tps = Subsystems.Shooter.preSpeed
 
         if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+            intake.finished = false
             align.enabled = true
         } else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-            if (align.aligned) {
-                shooter.tps = align.tps
-                shooter.enabled = true
-            } else {
-                shooter.enabled = false
-            }
-            if (shooter.spunUp) {
+            antiJamServo.set(Subsystems.AntiJam.shootPos)
+            shooter.tps = align.tps
+            if (shooter.spunUp && align.aligned) {
                 intakeMotor.set(Subsystems.Shooter.intakeSpeed)
                 transferMotor.set(Subsystems.Shooter.transferSpeed)
             } else {
@@ -108,9 +110,14 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
             }
         } else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
             align.enabled = false
-            shooter.enabled = false
+            shooter.tps = Subsystems.Shooter.idleSpeed
+            antiJamServo.set(Subsystems.AntiJam.blockPos)
             intakeMotor.set(0.0)
             transferMotor.set(0.0)
+        }
+
+        if (shooter.realTPS < Subsystems.Shooter.clearSpeed) {
+            antiJamServo.set(Subsystems.AntiJam.blockPos)
         }
 
         if (align.tags > 0 && align.aligned)
@@ -126,37 +133,6 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
             rightColor = RGB.GREEN
         else
             rightColor = RGB.RED
-
-        if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
-            shooter.tps += Subsystems.Shooter.changeTPS
-        if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
-            shooter.tps -= Subsystems.Shooter.changeTPS
-
-        if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-            shooter.tps = abs(shooter.tps)
-            shooter.enabled = !shooter.enabled
-        }
-
-        if (shooterOp.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-            shooter.tps = -abs(shooter.tps)
-            shooter.enabled = true
-        } else if (shooterOp.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
-            shooter.tps = abs(shooter.tps)
-            shooter.enabled = false
-        }
-
-        if (shooterOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
-            shooter.enabled = true
-        } else if (shooterOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-            if (shooter.spunUp) {
-                intakeMotor.set(1.0)
-                transferMotor.set(1.0)
-            }
-        } else if (shooterOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-            shooter.enabled = false
-            intakeMotor.set(0.0)
-            transferMotor.set(0.0)
-        }
 
         leftRGB.position = leftColor.pos
         rightRGB.position = rightColor.pos

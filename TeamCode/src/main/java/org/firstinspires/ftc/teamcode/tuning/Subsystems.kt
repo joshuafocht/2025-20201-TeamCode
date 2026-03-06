@@ -117,10 +117,10 @@ object Subsystems {
         var Kf: Double = 0.0
 
         @JvmField
-        var m: Double = 6.5
+        var m: Double = 6.8
 
         @JvmField
-        var b: Double = 800.0
+        var b: Double = 725.0
 
         @JvmField
         var tolerance: Double = 2.0
@@ -132,13 +132,13 @@ object Subsystems {
     @Configurable
     object BlueTeleOp {
         @JvmField
-        var tagOffset = 2.0
+        var tagOffset = 0.0
     }
 
     @Configurable
     object RedTeleOp {
         @JvmField
-        var tagOffset = -2.0
+        var tagOffset = 0.0
     }
 
     @Configurable

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems
 
-import android.net.wifi.aware.ParcelablePeerHandle
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.Pose
@@ -16,7 +15,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.tuning.RGB
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
-import kotlin.math.abs
 
 class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: Gamepad, gamepad2: Gamepad, val tagId: Int, val tagOffset: () -> Double, var idle: Boolean) {
     val telemetryM = PanelsTelemetry.telemetry
@@ -43,6 +41,8 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
     val driverOp = GamepadEx(gamepad1)
     var auto = false
+    var shoot = false
+    var state = 0
     var timer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
     init {
@@ -97,27 +97,41 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
 
         if (intake.finished && idle) shooter.tps = Subsystems.Shooter.preSpeed
 
-        if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
-            intake.finished = false
-            align.enabled = true
-            timer.reset()
-        } else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-            antiJamServo.set(Subsystems.AntiJam.shootPos)
-            shooter.tps = align.tps
-            if (shooter.spunUp && align.aligned && (timer.time() > Subsystems.AntiJam.moveTime)) {
-                intakeMotor.set(Subsystems.Shooter.intakeSpeed)
-                transferMotor.set(Subsystems.Shooter.transferSpeed)
-            } else {
+        if (driverOp.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) shoot = false
+        if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) shoot = !shoot
+
+        when (state) {
+            0 -> {
+                if (shoot) state++
+            }
+            1 -> {
+                intake.finished = false
+                align.enabled = true
+                timer.reset()
+                state++
+            }
+            2 -> {
+                antiJamServo.set(Subsystems.AntiJam.shootPos)
+                shooter.tps = align.tps
+                if (shooter.spunUp && align.aligned && (timer.time() > Subsystems.AntiJam.moveTime)) {
+                    intakeMotor.set(Subsystems.Shooter.intakeSpeed)
+                    transferMotor.set(Subsystems.Shooter.transferSpeed)
+                } else {
+                    intakeMotor.set(0.0)
+                    transferMotor.set(0.0)
+                }
+                if (!shoot) state++
+            }
+            3 -> {
+                align.enabled = false
+                if (idle) shooter.tps = Subsystems.Shooter.idleSpeed
+                else shooter.enabled = false
+                antiJamServo.set(Subsystems.AntiJam.blockPos)
                 intakeMotor.set(0.0)
                 transferMotor.set(0.0)
+                shoot = false
+                state = 0
             }
-        } else if (driverOp.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-            align.enabled = false
-            if (idle) shooter.tps = Subsystems.Shooter.idleSpeed
-            else shooter.enabled = false
-            antiJamServo.set(Subsystems.AntiJam.blockPos)
-            intakeMotor.set(0.0)
-            transferMotor.set(0.0)
         }
 
         if (shooter.realTPS < Subsystems.Shooter.clearSpeed) {

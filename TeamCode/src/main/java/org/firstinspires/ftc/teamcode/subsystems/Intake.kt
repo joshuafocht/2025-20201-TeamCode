@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
 import com.seattlesolvers.solverslib.hardware.servos.ServoEx
 import org.firstinspires.ftc.teamcode.tuning.Subsystems
+import kotlin.math.abs
 
 class
 Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shooter, val antiJamServo: ServoEx, var idle: Boolean) {
@@ -49,7 +50,11 @@ Intake(val intakeMotor: MotorEx, val transferMotor: MotorEx, val shooter: Shoote
                 }
             }
             IntakeStates.SPIN_BACK -> {
-                if (!shooter.spunUp) {
+                if (!(abs(shooter.tps) - abs(shooter.realTPS) < 100)) {
+                    intakeMotor.set(Subsystems.Intake.intakeInPower)
+                    transferMotor.set(Subsystems.Intake.transferInPower)
+                    antiJamServo.set(Subsystems.AntiJam.intakePos)
+
                     if (!idle) shooter.enabled = false
                     else shooter.tps = Subsystems.Shooter.idleSpeed
                     state = IntakeStates.BACK_OFF

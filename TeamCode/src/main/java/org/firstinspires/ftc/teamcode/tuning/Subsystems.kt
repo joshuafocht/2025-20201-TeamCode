@@ -18,7 +18,7 @@ object Subsystems {
         var Ks: Double = 0.0
 
         @JvmField
-        var Kv: Double = 1.7
+        var Kv: Double = 1.9
 
         @JvmField
         var Ka: Double = 0.0
@@ -33,7 +33,7 @@ object Subsystems {
         var targetTPS: Double = 1400.0
 
         @JvmField
-        var tolerance: Double = 100.0
+        var tolerance: Double = 50.0
 
         @JvmField
         var transferSpeed: Double = 0.75
@@ -117,10 +117,10 @@ object Subsystems {
         var Kf: Double = 0.0
 
         @JvmField
-        var m: Double = 6.8
+        var m: Double = 6.2
 
         @JvmField
-        var b: Double = 725.0
+        var b: Double = 750.0
 
         @JvmField
         var tolerance: Double = 2.0
@@ -132,13 +132,13 @@ object Subsystems {
     @Configurable
     object BlueTeleOp {
         @JvmField
-        var tagOffset = 0.0
+        var tagOffset = 3.0
     }
 
     @Configurable
     object RedTeleOp {
         @JvmField
-        var tagOffset = 0.0
+        var tagOffset = -3.0
     }
 
     @Configurable

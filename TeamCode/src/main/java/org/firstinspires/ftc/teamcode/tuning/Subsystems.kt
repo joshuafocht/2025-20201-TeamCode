@@ -120,7 +120,7 @@ object Subsystems {
         var m: Double = 6.8
 
         @JvmField
-        var b: Double = 725.0
+        var b: Double = 735.0
 
         @JvmField
         var tolerance: Double = 2.0
@@ -147,7 +147,7 @@ object Subsystems {
         var angle = 135.0
 
         @JvmField
-        var tps = 1400.0
+        var tps = 1100.0
     }
 
     @Configurable
@@ -156,34 +156,34 @@ object Subsystems {
         var angle = 45.0
 
         @JvmField
-        var tps = 1400.0
+        var tps = 1100.0
     }
 
     @Configurable
     object BlueFarAuto {
         @JvmField
-        var angle = 115.0
+        var angle = 110.0
 
         @JvmField
-        var tps = 1725.0
+        var tps = 1450.0
     }
 
     @Configurable
     object RedFarAuto {
         @JvmField
-        var angle = 65.0
+        var angle = 70.0
 
         @JvmField
-        var tps = 1725.0
+        var tps = 1450.0
     }
 
     @Configurable
     object AutoDelay {
         @JvmField
-        var safeDelay = 15000
+        var safeDelay = 0 // 15000
 
         @JvmField
-        var leaveDelay = 25000
+        var leaveDelay = 0 // 25000
     }
 
     @Configurable

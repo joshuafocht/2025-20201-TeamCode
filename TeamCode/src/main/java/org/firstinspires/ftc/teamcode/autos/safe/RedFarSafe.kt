@@ -43,7 +43,7 @@ class RedFarSafe : LinearOpMode() {
                     Pose(84.000, 16.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(90.0), Math.toRadians(Subsystems.BlueFarAuto.angle))
+            .setLinearHeadingInterpolation(Math.toRadians(90.0), Math.toRadians(Subsystems.RedFarAuto.angle))
             .build();
 
         val driveToArtifact1Path = follower
@@ -54,7 +54,7 @@ class RedFarSafe : LinearOpMode() {
                     Pose(96.000, 36.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.BlueFarAuto.angle), Math.toRadians(0.0))
+            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.RedFarAuto.angle), Math.toRadians(0.0))
             .build();
 
         val pickupArtifact1Path = follower

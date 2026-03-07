@@ -42,7 +42,7 @@ class BlueGoalSafe : LinearOpMode() {
                 Pose(48.000, 96.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(270.0), Math.toRadians(Subsystems.BlueFarAuto.angle))
+            .setLinearHeadingInterpolation(Math.toRadians(270.0), Math.toRadians(Subsystems.BlueGoalAuto.angle))
             .build();
 
         val driveToArtifact1Path = follower
@@ -53,7 +53,7 @@ class BlueGoalSafe : LinearOpMode() {
                     Pose(48.000, 84.000)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.BlueFarAuto.angle), Math.toRadians(180.0))
+            .setLinearHeadingInterpolation(Math.toRadians(Subsystems.BlueGoalAuto.angle), Math.toRadians(180.0))
             .build();
 
         val pickupArtifact1Path = follower

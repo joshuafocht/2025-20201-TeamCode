@@ -156,5 +156,6 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         telemetryJ.addData("align.aligned", align.aligned)
         telemetryJ.addData("align.tags", align.tags)
         telemetryJ.addData("align.dist", align.dist)
+        telemetryJ.addData("align.offset", align.offset)
     }
 }

@@ -57,6 +57,7 @@ class DucksTeleOpManual : LinearOpMode() {
             shooterOp.readButtons()
 
             shooter.update()
+            align.update()
 
             follower.setTeleOpDrive(
                 driverOp.leftY * moveMult,
@@ -67,7 +68,7 @@ class DucksTeleOpManual : LinearOpMode() {
             if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER))
                 align.enabled = true
             else
-                align.enabled = true
+                align.enabled = false
 
             if (driverOp.wasJustPressed(GamepadKeys.Button.DPAD_UP))
                 moveMult += 0.05

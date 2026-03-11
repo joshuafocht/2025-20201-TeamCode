@@ -72,7 +72,7 @@ class RedGoalSafe : LinearOpMode() {
             .addPath(
                 BezierLine(
                     Pose(128.000, 84.000),
-                    Pose(18.000, 100.000)
+                    Pose(126.000, 100.000)
                 )
             )
             .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(-90.0))

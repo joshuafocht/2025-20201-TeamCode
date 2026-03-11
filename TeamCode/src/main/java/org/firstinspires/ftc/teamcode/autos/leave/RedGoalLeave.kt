@@ -23,7 +23,8 @@ class RedGoalLeave : LinearOpMode() {
             .addPath(
                 BezierLine(
                     Pose(112.000, 135.000),
-                    Pose(18.000, 100.000)
+                    Pose(126.000, 100.000)
+
                 )
             )
             .setConstantHeadingInterpolation(Math.toRadians(-90.0))

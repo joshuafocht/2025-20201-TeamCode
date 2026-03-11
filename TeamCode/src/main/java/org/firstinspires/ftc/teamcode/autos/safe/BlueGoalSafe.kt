@@ -72,7 +72,7 @@ class BlueGoalSafe : LinearOpMode() {
             .addPath(
                 BezierLine(
                     Pose(14.000, 84.000),
-                    Pose(126.000, 100.000)
+                    Pose(18.000, 100.000)
                 )
             )
             .setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(-90.0))

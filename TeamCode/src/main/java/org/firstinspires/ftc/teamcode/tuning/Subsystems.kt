@@ -27,6 +27,9 @@ object Subsystems {
         var shootTime: Double = 2000.0
 
         @JvmField
+        var farShootTime: Double = 4000.0
+
+        @JvmField
         var changeTPS: Double = 10.0
 
         @JvmField
@@ -174,19 +177,19 @@ object Subsystems {
     @Configurable
     object BlueFarAuto {
         @JvmField
-        var angle = 110.0
+        var angle = 115.0
 
         @JvmField
-        var tps = 1450.0
+        var tps = 1550.0
     }
 
     @Configurable
     object RedFarAuto {
         @JvmField
-        var angle = 70.0
+        var angle = 65.0
 
         @JvmField
-        var tps = 1450.0
+        var tps = 1600.0
     }
 
     @Configurable

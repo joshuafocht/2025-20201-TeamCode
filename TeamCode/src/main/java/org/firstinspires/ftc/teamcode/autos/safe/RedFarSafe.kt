@@ -97,42 +97,46 @@ class RedFarSafe : LinearOpMode() {
                     state++
                 }
                 2 -> {
-                    if (!follower.followingPathChain && shooter.spunUp) state++
+                    if (!follower.followingPathChain && shooter.spunUp) {
+                        state++
+                        timer.reset()
+                    }
                 }
                 3 -> {
-                    intakeMotor.set(Subsystems.Shooter.intakeSpeed)
-                    transferMotor.set(Subsystems.Shooter.transferSpeed)
-                    state++
-                    timer.reset()
-                }
-                4 -> {
-                    if (timer.time() > Subsystems.Shooter.shootTime) {
+                    if (shooter.spunUp) {
+                        intakeMotor.set(Subsystems.Shooter.intakeSpeed)
+                        transferMotor.set(Subsystems.Shooter.transferSpeed)
+                    } else {
+                        intakeMotor.set(0.0)
+                        transferMotor.set(0.0)
+                    }
+                    if (timer.time() > Subsystems.Shooter.farShootTime) {
                         shooter.tps = Subsystems.Shooter.idleSpeed
                         intakeMotor.set(0.0)
                         transferMotor.set(0.0)
                         state++
                     }
                 }
-                5 -> {
+                4 -> {
                     follower.followPath(driveToArtifact1Path)
                     state++
                 }
-                6 -> {
+                5 -> {
                     if (!follower.followingPathChain) state++
                 }
-                7 -> {
+                6 -> {
                     intake.enabled = true
                     follower.followPath(pickupArtifact1Path, 0.5, true)
                     state++
                 }
-                8 -> {
+                7 -> {
                     if (!follower.followingPathChain) state++
                 }
-                9 -> {
+                8 -> {
                     follower.followPath(leavePath)
                     state++
                 }
-                10 -> {
+                9 -> {
                     if (!follower.followingPathChain) {
                         intake.enabled = false
                         state++

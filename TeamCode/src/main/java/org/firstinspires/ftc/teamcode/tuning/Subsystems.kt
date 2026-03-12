@@ -120,7 +120,7 @@ object Subsystems {
         var m: Double = 6.8
 
         @JvmField
-        var b: Double = 735.0
+        var b: Double = 740.0
 
         @JvmField
         var tolerance: Double = 2.0
@@ -135,7 +135,7 @@ object Subsystems {
         var closeTagOffset = 0.0
 
         @JvmField
-        var farTagOffset = -3.0
+        var farTagOffset = 3.0
 
         @JvmField
         var farDist = 100.0
@@ -147,7 +147,7 @@ object Subsystems {
         var closeTagOffset = 0.0
 
         @JvmField
-        var farTagOffset = 3.0
+        var farTagOffset = -3.0
 
         @JvmField
         var farDist = 100.0
@@ -211,5 +211,11 @@ object Subsystems {
 
         @JvmField
         var moveTime = 1000.0
+    }
+
+    @Configurable
+    object EMA {
+        @JvmField
+        var alpha: Double = 0.03
     }
 }

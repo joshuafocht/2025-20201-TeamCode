@@ -44,6 +44,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
     val driverOp = GamepadEx(gamepad1)
     var auto = false
     var timer = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
+    var resetema = false
 
     init {
         follower.setStartingPose(Pose(72.000, 72.000, 90.000))
@@ -99,15 +100,20 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         if (driverOp.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
             intake.finished = false
             align.enabled = true
+            resetema = false
             timer.reset()
         } else if (driverOp.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+            if (!resetema && align.tags > 0) {
+                align.ema.ema = align.ema.new
+                resetema = true
+            }
             if (align.dist > farDist()) {
                 align.offset = farTagOffset()
             } else {
                 align.offset = closeTagOffset()
             }
             antiJamServo.set(Subsystems.AntiJam.shootPos)
-            shooter.tps = align.tps
+            shooter.tps = align.stps
             if (shooter.spunUp && align.aligned && (timer.time() > Subsystems.AntiJam.moveTime)) {
                 intakeMotor.set(Subsystems.Shooter.intakeSpeed)
                 transferMotor.set(Subsystems.Shooter.transferSpeed)
@@ -156,6 +162,7 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
         telemetryJ.addData("align.aligned", align.aligned)
         telemetryJ.addData("align.tags", align.tags)
         telemetryJ.addData("align.dist", align.dist)
+        telemetryJ.addData("align.sdist", align.sdist)
         telemetryJ.addData("align.offset", align.offset)
     }
 }

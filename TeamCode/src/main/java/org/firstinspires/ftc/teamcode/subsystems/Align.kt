@@ -28,6 +28,8 @@ class Align(val hardwareMap: HardwareMap, val follower: Follower, val shooter: S
         Subsystems.Align.Kf
     )
     var dist = 0.0
+    var sdist = 0.0
+    var ema = EMA()
     var targetHeading = 0.0
     val currentHeading
         get() = imu.robotYawPitchRollAngles.yaw
@@ -41,6 +43,9 @@ class Align(val hardwareMap: HardwareMap, val follower: Follower, val shooter: S
 
     val tps
         get() = Subsystems.Align.m * dist + Subsystems.Align.b
+
+    val stps
+        get() = Subsystems.Align.m * sdist + Subsystems.Align.b
 
     val aligned: Boolean
         get() = abs(targetHeading - currentHeading) < Subsystems.Align.tolerance && tags > 0
@@ -73,6 +78,8 @@ class Align(val hardwareMap: HardwareMap, val follower: Follower, val shooter: S
             if (tag.id == id) {
                 targetHeading = currentHeading - tag.ftcPose.bearing + offset // add if camera upright subtract if upside down
                 dist = tag.ftcPose.range
+                ema.update(dist)
+                sdist = ema.ema
                 tags++
                 break
             }

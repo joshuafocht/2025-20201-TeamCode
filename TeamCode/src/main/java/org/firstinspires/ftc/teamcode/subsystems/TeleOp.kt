@@ -113,7 +113,11 @@ class TeleOp(val hardwareMap: HardwareMap, val telemetry: Telemetry, gamepad1: G
                 align.offset = closeTagOffset()
             }
             antiJamServo.set(Subsystems.AntiJam.shootPos)
-            shooter.tps = align.stps
+            if (align.dist >= Subsystems.EMA.enableDist) {
+                shooter.tps = align.stps
+            } else {
+                shooter.tps = align.tps
+            }
             if (shooter.spunUp && align.aligned && (timer.time() > Subsystems.AntiJam.moveTime)) {
                 intakeMotor.set(Subsystems.Shooter.intakeSpeed)
                 transferMotor.set(Subsystems.Shooter.transferSpeed)

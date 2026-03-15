@@ -217,5 +217,8 @@ object Subsystems {
     object EMA {
         @JvmField
         var alpha: Double = 0.03
+
+        @JvmField
+        var enableDist: Double = 100.0
     }
 }
